@@ -39,15 +39,23 @@ router.get('/', adminController.getDashboard);
 
 // Wrapper to handle Cloudinary/Multer errors gracefully
 const handleUpload = (req, res, next) => {
+    console.log('--- ADD PRODUCT TRACE: [STAGE B] MULTER START ---');
     upload.array('images', 5)(req, res, (err) => {
         if (err) {
-            console.error('--- UPLOAD ERROR ---', err);
+            console.error('--- ADD PRODUCT TRACE: [STAGE C] MULTER/CLOUDINARY ERROR ---');
+            console.error(JSON.stringify({
+                name: err.name,
+                message: err.message,
+                code: err.code,
+                stack: err.stack
+            }, null, 2));
             return res.status(400).render('error', {
                 title: 'Upload Error | ALVORA',
                 message: err.message,
                 error: { status: 400, message: err.message }
             });
         }
+        console.log('--- ADD PRODUCT TRACE: [STAGE C] MULTER/CLOUDINARY SUCCESS ---');
         next();
     });
 };

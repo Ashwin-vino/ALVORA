@@ -93,27 +93,58 @@ exports.getAddProduct = (req, res) => {
 // Create New Product
 exports.createProduct = async (req, res, next) => {
   try {
+    console.log('--- ADD PRODUCT TRACE: [STAGE A] USER IDENTIFICATION ---');
+    console.log('User ID:', req.user?.id || req.user?._id, 'Email:', req.user?.email);
+
+    console.log('--- ADD PRODUCT TRACE: [STAGE D] PAYLOAD CREATION ---');
     const payload = productInput(req.body);
     const imageUrl = uploadedImageUrl(req) || String(req.body.imageUrl || '').trim();
+    console.log('Payload generated (without image/slug/creator):', payload);
+    console.log('Image URL resolved:', imageUrl);
 
+    console.log('--- ADD PRODUCT TRACE: [STAGE E] SLUG GENERATION ---');
     // Generate unique slug
     const baseSlug = payload.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
     payload.slug = `${baseSlug}-${Date.now()}`;
+    console.log('Slug generated:', payload.slug);
 
     // Add creator_id
     payload.creator_id = req.user.id || req.user._id;
 
+    console.log('--- ADD PRODUCT TRACE: [STAGE F] SUPABASE INSERT ---');
+    const insertData = {
+      ...payload,
+      ...(imageUrl ? { image_url: imageUrl } : {})
+    };
+    
     const { error } = await supabase
       .from('products')
-      .insert({
-        ...payload,
-        ...(imageUrl ? { image_url: imageUrl } : {})
-      });
+      .insert(insertData);
+
+    if (error) {
+      console.error('--- ADD PRODUCT TRACE: [STAGE F] SUPABASE ERROR ---');
+      console.error(JSON.stringify({
+        message: error.message,
+        code: error.code,
+        details: error.details,
+        hint: error.hint
+      }, null, 2));
+    } else {
+      console.log('--- ADD PRODUCT TRACE: [STAGE F] SUPABASE SUCCESS ---');
+    }
 
     throwIfSupabaseError(error, 'admin product creation');
 
+    console.log('--- ADD PRODUCT TRACE: [STAGE G] REDIRECT ---');
     res.redirect('/admin');
   } catch (error) {
+    console.error('--- ADD PRODUCT TRACE: [EXCEPTION CATCH BLOCK] ---');
+    console.error(JSON.stringify({
+      name: error.name,
+      message: error.message,
+      stack: error.stack,
+      status: error.status
+    }, null, 2));
     next(error);
   }
 };
