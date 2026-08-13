@@ -102,11 +102,9 @@ exports.createProduct = async (req, res, next) => {
     console.log('Payload generated (without image/slug/creator):', payload);
     console.log('Image URL resolved:', imageUrl);
 
-    console.log('--- ADD PRODUCT TRACE: [STAGE E] SLUG GENERATION ---');
-    // Generate unique slug
-    const baseSlug = payload.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
-    payload.slug = `${baseSlug}-${Date.now()}`;
-    console.log('Slug generated:', payload.slug);
+    console.log('--- ADD PRODUCT TRACE: [STAGE E] SLUG GENERATION OMITTED ---');
+    // The production database schema does not have a 'slug' column, so we do not send it.
+    // Database mappers fallback to using the product ID.
 
     // Add creator_id
     payload.creator_id = req.user.id || req.user._id;
