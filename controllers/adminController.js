@@ -96,6 +96,10 @@ exports.createProduct = async (req, res, next) => {
     const payload = productInput(req.body);
     const imageUrl = uploadedImageUrl(req) || String(req.body.imageUrl || '').trim();
 
+    // Generate unique slug
+    const baseSlug = payload.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+    payload.slug = `${baseSlug}-${Date.now()}`;
+
     // Add creator_id
     payload.creator_id = req.user.id || req.user._id;
 

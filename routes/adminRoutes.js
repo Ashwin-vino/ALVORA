@@ -37,13 +37,26 @@ router.use(isLoggedIn, isAdmin);
 // Render Admin Dashboard
 router.get('/', adminController.getDashboard);
 
+// Wrapper to handle Cloudinary/Multer errors gracefully
+const handleUpload = (req, res, next) => {
+    upload.array('images', 5)(req, res, (err) => {
+        if (err) {
+            return res.status(400).render('error', {
+                title: 'Upload Error | ALVORA',
+                error: { status: 400, message: err.message }
+            });
+        }
+        next();
+    });
+};
+
 // Render Add Product Form & Handle Creation
 router.get('/add-product', adminController.getAddProduct);
-router.post('/add-product', upload.array('images', 5), adminController.createProduct);
+router.post('/add-product', handleUpload, adminController.createProduct);
 
 // Render Edit Product Form & Handle Updates
 router.get('/edit-product/:id', adminController.getEditProduct);
-router.post('/edit-product/:id', upload.array('images', 5), adminController.updateProduct);
+router.post('/edit-product/:id', handleUpload, adminController.updateProduct);
 
 // Handle Product Deletion
 router.post('/delete-product/:id', adminController.deleteProduct);
