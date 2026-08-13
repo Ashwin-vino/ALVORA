@@ -1,0 +1,561 @@
+<!-- Top Announcement Bar -->
+<div class="announcement-bar">
+    <div class="announcement-content">
+        <span>COMPLIMENTARY WORLDWIDE EXPRESS SHIPPING ON ORDERS OVER $500</span>
+    </div>
+</div>
+
+<!-- Main Navigation -->
+<header class="navbar-header" id="navbar">
+
+    <div class="navbar-top">
+
+        <!-- Search -->
+        <div class="nav-left">
+            <button
+                type="button"
+                class="search-trigger-btn"
+                id="searchToggleBtn"
+                aria-label="Open Search"
+                aria-controls="searchOverlay"
+                aria-expanded="false"
+                aria-haspopup="dialog"
+            >
+                <i class="ri-search-line"></i>
+                <span class="search-label">SEARCH</span>
+            </button>
+        </div>
+
+        <!-- Logo -->
+        <div class="nav-center">
+            <a href="/" class="brand-logo" aria-label="ALVORA Home">
+                <img src="/images/brand/logo.png" alt="ALVORA" class="alvora-logo">
+                <span class="alvora-logotext" style="color: #000; font-weight: 700;">ALVORA</span>
+            </a>
+        </div>
+
+        <!-- Right Actions -->
+        <div class="nav-right">
+
+            <!-- Admin -->
+            <% if (typeof isOgAdmin !== 'undefined' && isOgAdmin) { %>
+                <!-- OG Admin: Just "ADMIN" Badge -->
+                <span style="border: 1px solid currentColor; border-radius: 4px; padding: 6px 10px; margin-right: 15px; font-size: 10px; letter-spacing: 1px; line-height: 1; font-weight: 600; text-transform: uppercase;">ADMIN</span>
+                <a href="/admin" class="nav-action-link admin-badge" title="Admin Dashboard">
+                    <i class="ri-dashboard-line"></i>
+                    <span class="nav-label">DASH</span>
+                </a>
+            <% } else if (typeof isSubAdmin !== 'undefined' && isSubAdmin) { %>
+                <!-- Normal Admin: USER | ADMIN Switch -->
+                    <form action="/admin/toggle-mode" method="POST" style="display: flex; align-items: center; border: 1px solid currentColor; border-radius: 4px; overflow: hidden; margin-right: 15px; font-size: 10px; letter-spacing: 1px; line-height: 1;">
+                        <button type="submit" name="mode" value="user" style="background: <%= (typeof isAdminMode === 'undefined' || !isAdminMode) ? '#333' : 'transparent' %>; color: <%= (typeof isAdminMode === 'undefined' || !isAdminMode) ? '#fff' : '#000' %>; border: none; padding: 6px 10px; cursor: pointer; font-weight: 600; text-transform: uppercase; transition: all 0.3s ease;">USER</button>
+                        <button type="submit" name="mode" value="admin" style="background: <%= (typeof isAdminMode !== 'undefined' && isAdminMode) ? '#C09E58' : 'transparent' %>; color: <%= (typeof isAdminMode !== 'undefined' && isAdminMode) ? '#fff' : '#000' %>; border: none; padding: 6px 10px; cursor: pointer; font-weight: 600; text-transform: uppercase; transition: all 0.3s ease;">ADMIN</button>
+                    </form>
+
+                    <% if (typeof isAdminMode !== 'undefined' && isAdminMode) { %>
+                    <a href="/admin" class="nav-action-link admin-badge" title="Admin Dashboard">
+                        <i class="ri-dashboard-line"></i>
+                        <span class="nav-label">DASH</span>
+                    </a>
+                    <% } %>
+                <% } %>
+
+
+            <!-- Wishlist -->
+            <a
+                href="/wishlist"
+                class="nav-action-link"
+                aria-label="Wishlist"
+                title="Wishlist"
+            >
+                <i class="ri-heart-3-line"></i>
+
+                <span class="badge-count wishlist-count">
+                    <%= typeof wishlistCount !== 'undefined'
+                        ? wishlistCount
+                        : 0 %>
+                </span>
+            </a>
+
+
+            <!-- Cart -->
+            <a
+                href="/cart"
+                class="nav-action-link"
+                aria-label="Shopping Cart"
+                title="Cart"
+            >
+                <i class="ri-shopping-bag-3-line"></i>
+
+                <span class="badge-count cart-count">
+                    <%= typeof cartCount !== 'undefined'
+                        ? cartCount
+                        : 0 %>
+                </span>
+            </a>
+
+
+            <!-- Profile / Login -->
+            <% if (
+                typeof user !== 'undefined' &&
+                user
+            ) { %>
+
+                <a
+                    href="/profile"
+                    class="nav-action-link user-profile-link"
+                    aria-label="Account Profile"
+                    title="Account"
+                >
+
+                    <% if (user.avatar) { %>
+
+                        <img
+                            src="<%= user.avatar %>"
+                            alt="<%= user.name || 'Account' %>"
+                            class="user-avatar-img"
+                        >
+
+                    <% } else { %>
+
+                        <i class="ri-user-3-line"></i>
+
+                    <% } %>
+
+                    <span class="nav-label user-name">
+                        <%= user.name
+                            ? user.name.split(' ')[0]
+                            : 'ACCOUNT' %>
+                    </span>
+
+                </a>
+
+            <% } else { %>
+
+                <a
+                    href="/auth/google"
+                    class="nav-action-link"
+                    aria-label="Sign In"
+                    title="Sign In"
+                >
+                    <i class="ri-user-3-line"></i>
+                    <span class="nav-label">LOGIN</span>
+                </a>
+
+            <% } %>
+
+
+            <!-- Mobile Menu -->
+            <button
+                type="button"
+                class="mobile-menu-btn"
+                id="mobileMenuToggle"
+                aria-label="Toggle Mobile Menu"
+            >
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- Category Navigation -->
+    <nav
+        class="navbar-bottom"
+        id="primaryNav"
+        aria-label="Primary navigation"
+    >
+
+        <ul class="nav-links">
+
+            <li class="nav-item">
+                <a
+                    href="/"
+                    class="nav-link <%= typeof currentPath !== 'undefined' && currentPath === '/' ? 'active' : '' %>"
+                >
+                    HOME
+                </a>
+            </li>
+
+
+            <li class="nav-item">
+                <a
+                    href="/products/category/men"
+                    class="nav-link <%= typeof currentPath !== 'undefined' && currentPath.startsWith('/products/category/men') ? 'active' : '' %>"
+                >
+                    MEN
+                </a>
+            </li>
+
+
+            <li class="nav-item">
+                <a
+                    href="/products/category/women"
+                    class="nav-link <%= typeof currentPath !== 'undefined' && currentPath.startsWith('/products/category/women') ? 'active' : '' %>"
+                >
+                    WOMEN
+                </a>
+            </li>
+
+
+            <li class="nav-item">
+                <a
+                    href="/products/category/kids"
+                    class="nav-link <%= typeof currentPath !== 'undefined' && currentPath.startsWith('/products/category/kids') ? 'active' : '' %>"
+                >
+                    KIDS
+                </a>
+            </li>
+
+
+            <li class="nav-item">
+                <a
+                    href="/products/category/footwear"
+                    class="nav-link <%= typeof currentPath !== 'undefined' && currentPath.startsWith('/products/category/footwear') ? 'active' : '' %>"
+                >
+                    FOOTWEAR
+                </a>
+            </li>
+
+
+            <li class="nav-item">
+                <a
+                    href="/products?category=new"
+                    class="nav-link"
+                >
+                    NEW ARRIVALS
+                </a>
+            </li>
+
+
+            <li class="nav-item">
+                <a
+                    href="/products"
+                    class="nav-link <%= typeof currentPath !== 'undefined' && currentPath === '/products' ? 'active' : '' %>"
+                >
+                    COLLECTIONS
+                </a>
+            </li>
+
+        </ul>
+
+    </nav>
+
+</header>
+
+
+<!-- Search Overlay -->
+<div
+    class="search-overlay"
+    id="searchOverlay"
+    role="dialog"
+    aria-modal="true"
+    aria-hidden="true"
+    aria-labelledby="searchTitle"
+>
+
+    <div class="search-container">
+
+        <div class="search-header">
+
+            <span
+                class="search-title"
+                id="searchTitle"
+            >
+                SEARCH ALVORA
+            </span>
+
+            <button
+                type="button"
+                class="search-close-btn"
+                id="searchCloseBtn"
+                aria-label="Close Search"
+            >
+                <i class="ri-close-line"></i>
+            </button>
+
+        </div>
+
+
+        <form
+            action="/products/search"
+            method="GET"
+            class="search-form"
+            aria-label="Product search form"
+        >
+
+            <div class="search-input-wrapper">
+
+                <label
+                    for="headerSearchInput"
+                    class="sr-only"
+                >
+                    Search ALVORA products
+                </label>
+
+                <i
+                    class="ri-search-line search-icon"
+                    aria-hidden="true"
+                ></i>
+
+                <input
+                    type="text"
+                    id="headerSearchInput"
+                    name="q"
+                    class="search-input"
+                    placeholder="Search tailored suits, cashmere, footwear..."
+                    autocomplete="off"
+                    required
+                    aria-label="Search ALVORA products"
+                >
+
+                <button
+                    type="submit"
+                    class="search-submit-btn"
+                    aria-label="Submit search"
+                >
+                    DISCOVER
+                </button>
+
+            </div>
+
+        </form>
+
+
+        <div class="quick-search-tags">
+
+            <span class="quick-search-label">
+                POPULAR:
+            </span>
+
+            <a
+                href="/products/search?q=Cashmere"
+                class="search-tag"
+            >
+                Cashmere
+            </a>
+
+            <a
+                href="/products/search?q=Tailored+Blazer"
+                class="search-tag"
+            >
+                Tailored Blazer
+            </a>
+
+            <a
+                href="/products/search?q=Silk+Dress"
+                class="search-tag"
+            >
+                Silk Dress
+            </a>
+
+            <a
+                href="/products/search?q=Leather+Boots"
+                class="search-tag"
+            >
+                Leather Boots
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- Mobile Navigation Overlay -->
+<div
+    class="mobile-nav-overlay"
+    id="mobileNavOverlay"
+></div>
+
+
+<!-- Mobile Navigation Drawer -->
+<aside
+    class="mobile-nav-drawer"
+    id="mobileNavDrawer"
+    aria-hidden="true"
+    aria-label="Mobile navigation menu"
+>
+
+    <div class="mobile-nav-header">
+
+        <a
+            href="/"
+            class="brand-logo-sm"
+        >
+            ALVORA
+        </a>
+
+        <button
+            type="button"
+            class="mobile-nav-close"
+            id="mobileNavClose"
+            aria-label="Close Menu"
+        >
+            <i class="ri-close-line"></i>
+        </button>
+
+    </div>
+
+
+    <!-- Mobile Search -->
+    <div class="mobile-search-wrapper">
+
+        <form
+            action="/products/search"
+            method="GET"
+            class="mobile-search-form"
+            aria-label="Search products"
+        >
+
+            <label
+                for="mobileSearchInput"
+                class="sr-only"
+            >
+                Search ALVORA products
+            </label>
+
+            <input
+                id="mobileSearchInput"
+                type="text"
+                name="q"
+                placeholder="Search product..."
+                required
+                aria-label="Search ALVORA products"
+            >
+
+            <button
+                type="submit"
+                aria-label="Submit search"
+            >
+                <i
+                    class="ri-search-line"
+                    aria-hidden="true"
+                ></i>
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <!-- Mobile Links -->
+    <ul class="mobile-nav-list">
+
+        <li>
+            <a href="/">HOME</a>
+        </li>
+
+        <li>
+            <a href="/products/category/men">MEN</a>
+        </li>
+
+        <li>
+            <a href="/products/category/women">WOMEN</a>
+        </li>
+
+        <li>
+            <a href="/products/category/kids">KIDS</a>
+        </li>
+
+        <li>
+            <a href="/products/category/footwear">FOOTWEAR</a>
+        </li>
+
+        <li>
+            <a href="/products">NEW ARRIVALS</a>
+        </li>
+
+        <li>
+            <a href="/products">COLLECTIONS</a>
+        </li>
+
+        <li>
+            <a href="/wishlist">
+                WISHLIST
+                (<%= typeof wishlistCount !== 'undefined'
+                    ? wishlistCount
+                    : 0 %>)
+            </a>
+        </li>
+
+        <li>
+            <a href="/cart">
+                SHOPPING CART
+                (<%= typeof cartCount !== 'undefined'
+                    ? cartCount
+                    : 0 %>)
+            </a>
+        </li>
+
+
+        <% if (
+            typeof user !== 'undefined' &&
+            user
+        ) { %>
+
+            <li>
+                <a href="/profile">
+                    MY PROFILE
+                    (<%= user.name || 'ACCOUNT' %>)
+                </a>
+            </li>
+
+
+            <% if ((typeof isOgAdmin !== 'undefined' && isOgAdmin) || (typeof isSubAdmin !== 'undefined' && isSubAdmin && typeof isAdminMode !== 'undefined' && isAdminMode)) { %>
+
+                <li>
+                    <a
+                        href="/admin"
+                        class="admin-link"
+                    >
+                        ADMIN PANEL
+                    </a>
+                </li>
+
+            <% } %>
+
+
+            <li>
+                <a
+                    href="/auth/logout"
+                    class="logout-link"
+                >
+                    LOG OUT
+                </a>
+            </li>
+
+        <% } else { %>
+
+            <li>
+                <a
+                    href="/auth/google"
+                    class="login-link"
+                >
+                    LOG IN / REGISTER
+                </a>
+            </li>
+
+        <% } %>
+
+    </ul>
+
+
+    <!-- Mobile Footer -->
+    <div class="mobile-nav-footer">
+
+        <p>
+            ALVORA LUXURY APPAREL
+        </p>
+
+        <p class="tagline">
+            Quiet Luxury & Modern Craftsmanship
+        </p>
+
+    </div>
+
+</aside>
+

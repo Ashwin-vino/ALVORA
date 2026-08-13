@@ -1,0 +1,114 @@
+<%- include('layouts/header') %>
+<%- include('layouts/navbar') %>
+
+<main class="orders-page-wrapper">
+    <!-- Orders Page Banner -->
+    <section class="orders-header-section">
+        <div class="container">
+            <div class="orders-header-content center">
+                <span class="editorial-subheading">CLIENT ACCOUNT</span>
+                <h1 class="orders-title">Order History</h1>
+                <p class="orders-description">Review past purchases, current shipping status, and digital invoices from ALVORA.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Orders History Content Section -->
+    <section class="section-padding orders-body-section">
+        <div class="container">
+            <% if (typeof orders !== 'undefined' && orders && orders.length > 0) { %>
+                <div class="orders-list-container">
+                    <% orders.forEach(order => { %>
+                        <div class="order-card-wrapper">
+                            <!-- Order Header Info -->
+                            <div class="order-card-header">
+                                <div class="order-meta-col">
+                                    <span class="meta-label">ORDER PLACED</span>
+                                    <span class="meta-value">
+                                        <%= order.createdAt ? new Date(order.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : 'N/A' %>
+                                    </span>
+                                </div>
+                                <div class="order-meta-col">
+                                    <span class="meta-label">REFERENCE NUMBER</span>
+                                    <span class="meta-value order-ref">#<%= order.orderNumber || order._id.toString().substring(0, 8).toUpperCase() %></span>
+                                </div>
+                                <div class="order-meta-col">
+                                    <span class="meta-label">TOTAL AMOUNT</span>
+                                    <span class="meta-value price-total">
+                                        $<%= order.totalAmount ? order.totalAmount.toLocaleString('en-US', { minimumFractionDigits: 2 }) : '0.00' %>
+                                    </span>
+                                </div>
+                                <div class="order-meta-col status-col">
+                                    <span class="status-badge <%= (order.orderStatus || 'Processing').toLowerCase() %>">
+                                        <%= (order.orderStatus || 'Processing').toUpperCase() %>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- Order Products Items List -->
+                            <div class="order-card-body">
+                                <div class="order-items-list">
+                                    <% const orderItems = Array.isArray(order.orderItems) ? order.orderItems : (Array.isArray(order.items) ? order.items : []); %>
+                                    <% if (orderItems.length > 0) { %>
+                                        <% orderItems.forEach(item => { %>
+                                            <% const product = item.product || item; %>
+                                            <div class="order-item-row">
+                                                <div class="order-item-img">
+                                                    <img 
+                                                        src="<%= product && product.images && product.images.length > 0 ? product.images[0] : '/images/placeholder.jpg' %>" 
+                                                        alt="<%= product ? product.name : 'Garment' %>"
+                                                    >
+                                                </div>
+                                                <div class="order-item-info">
+                                                    <h3 class="order-item-name">
+                                                        <% if (product && product._id) { %>
+                                                            <a href="/products/<%= product.slug || product._id %>"><%= product.name %></a>
+                                                        <% } else { %>
+                                                            <%= item.name || 'ALVORA Creation' %>
+                                                        <% } %>
+                                                    </h3>
+                                                    <% if (item.size) { %>
+                                                        <span class="order-item-spec">Size: <%= item.size %></span>
+                                                    <% } %>
+                                                    <span class="order-item-qty">Quantity: <%= item.quantity || 1 %></span>
+                                                </div>
+                                                <div class="order-item-price">
+                                                    $<%= ((item.price || (product ? product.price : 0)) * (item.quantity || 1)).toLocaleString('en-US', { minimumFractionDigits: 2 }) %>
+                                                </div>
+                                            </div>
+                                        <% }); %>
+                                    <% } %>
+                                </div>
+
+                                <!-- Shipping Address Summary -->
+                                <% if (order.shippingAddress) { %>
+                                    <div class="order-shipping-summary">
+                                        <h4>DELIVERY DESTINATION</h4>
+                                        <p>
+                                            <strong><%= order.shippingAddress.fullName || (user ? user.name : '') %></strong><br>
+                                            <%= order.shippingAddress.street || order.shippingAddress.address || 'Address unavailable' %><br>
+                                            <%= order.shippingAddress.city %>, <%= order.shippingAddress.state %> <%= order.shippingAddress.pincode %><br>
+                                            <%= order.shippingAddress.country %>
+                                        </p>
+                                    </div>
+                                <% } %>
+                            </div>
+                        </div>
+                    <% }); %>
+                </div>
+            <% } else { %>
+                <!-- Empty Orders History State -->
+                <div class="empty-orders-container center">
+                    <i class="ri-history-line empty-orders-icon"></i>
+                    <h2>No Order History Found</h2>
+                    <p>You have not placed any orders yet. Discover our newest collections and experience ALVORA quiet luxury.</p>
+                    <a href="/products" class="btn btn-primary margin-top-lg">DISCOVER COLLECTIONS</a>
+                </div>
+            <% } %>
+        </div>
+    </section>
+</main>
+
+<%- include('layouts/footer') %>
+<%- include('layouts/scripts') %>
+

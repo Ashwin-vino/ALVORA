@@ -1,0 +1,212 @@
+<%- include('layouts/header') %>
+<%- include('layouts/navbar') %>
+
+<main class="collection-page-wrapper">
+    <!-- Collection Header / Editorial Hero Banner -->
+    <header class="collection-hero">
+        <div class="container">
+            <div class="collection-hero-content center">
+                <span class="editorial-subheading">ALVORA ARCHIVE</span>
+                <h1 class="collection-title"><%= typeof categoryTitle !== 'undefined' ? categoryTitle : 'The Full Collection' %></h1>
+                <p class="collection-description">
+                    <%= typeof categoryDescription !== 'undefined' ? categoryDescription : 'Timeless garments crafted with sculptural precision, pure cashmere, and hand-finished details.' %>
+                </p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Collection Control Toolbar (Filters & Sorting) -->
+    <section class="collection-toolbar-section">
+        <div class="container">
+            <div class="toolbar-container">
+                <!-- Left: Filter Toggle Button & Active Filter Tags -->
+                <div class="toolbar-left">
+                    <button type="button" class="filter-toggle-btn" id="filterDrawerBtn">
+                        <i class="ri-equalizer-line"></i>
+                        <span>FILTER PRODUCTS</span>
+                    </button>
+                    <span class="product-count-label">
+                        Showing <strong><%= typeof products !== 'undefined' ? products.length : 0 %></strong> creations
+                    </span>
+                </div>
+
+                <!-- Right: Sorting Selector -->
+                <div class="toolbar-right">
+                    <form action="/products" method="GET" class="sort-form" id="sortForm">
+                        <% if (typeof selectedCategory !== 'undefined' && selectedCategory) { %>
+                            <input type="hidden" name="category" value="<%= selectedCategory %>">
+                        <% } %>
+                        <label for="sortSelect" class="sort-label">SORT BY:</label>
+                        <select name="sort" id="sortSelect" class="sort-select" onchange="this.form.submit()">
+                            <option value="newest" <%= typeof currentSort !== 'undefined' && currentSort === 'newest' ? 'selected' : '' %>>Newest Arrivals</option>
+                            <option value="price-asc" <%= typeof currentSort !== 'undefined' && currentSort === 'price-asc' ? 'selected' : '' %>>Price: Low to High</option>
+                            <option value="price-desc" <%= typeof currentSort !== 'undefined' && currentSort === 'price-desc' ? 'selected' : '' %>>Price: High to Low</option>
+                            <option value="popular" <%= typeof currentSort !== 'undefined' && currentSort === 'popular' ? 'selected' : '' %>>Featured</option>
+                        </select>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Collection Body Section (Sidebar + Product Grid) -->
+    <section class="collection-body-section section-padding">
+        <div class="container">
+            <div class="collection-layout">
+                <!-- Filter Drawer Sidebar -->
+                <aside class="filter-sidebar" id="filterSidebar">
+                    <div class="sidebar-header">
+                        <h3>REFINE SELECTION</h3>
+                        <button type="button" class="sidebar-close-btn" id="closeFilterBtn">
+                            <i class="ri-close-line"></i>
+                        </button>
+                    </div>
+
+                    <form action="/products" method="GET" class="filter-form">
+                        <!-- Category Filter -->
+                        <div class="filter-group">
+                            <h4 class="filter-group-title">Category</h4>
+                            <ul class="filter-list">
+                                <li>
+                                    <a href="/products" class="filter-link <%= !selectedCategory ? 'active' : '' %>">All Collections</a>
+                                </li>
+                                <li>
+                                    <a href="/products/category/men" class="filter-link <%= selectedCategory === 'men' ? 'active' : '' %>">Men's Apparel</a>
+                                </li>
+                                <li>
+                                    <a href="/products/category/women" class="filter-link <%= selectedCategory === 'women' ? 'active' : '' %>">Women's Apparel</a>
+                                </li>
+                                <li>
+                                    <a href="/products/category/kids" class="filter-link <%= selectedCategory === 'kids' ? 'active' : '' %>">Kids Collection</a>
+                                </li>
+                                <li>
+                                    <a href="/products/category/footwear" class="filter-link <%= selectedCategory === 'footwear' ? 'active' : '' %>">Footwear</a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Sizes Filter -->
+                        <div class="filter-group">
+                            <h4 class="filter-group-title">Size</h4>
+                            <div class="size-filter-grid">
+                                <% ['XS', 'S', 'M', 'L', 'XL', 'XXL'].forEach(size => { %>
+                                    <label class="size-checkbox-label">
+                                        <input type="checkbox" name="sizes" value="<%= size %>" <%= typeof selectedSizes !== 'undefined' && selectedSizes.includes(size) ? 'checked' : '' %>>
+                                        <span class="size-box"><%= size %></span>
+                                    </label>
+                                <% }); %>
+                            </div>
+                        </div>
+
+                        <!-- Price Range Filter -->
+                        <div class="filter-group">
+                            <h4 class="filter-group-title">Price Range</h4>
+                            <div class="price-input-row">
+                                <input type="number" name="minPrice" placeholder="Min $" value="<%= typeof minPrice !== 'undefined' ? minPrice : '' %>">
+                                <span>-</span>
+                                <input type="number" name="maxPrice" placeholder="Max $" value="<%= typeof maxPrice !== 'undefined' ? maxPrice : '' %>">
+                            </div>
+                        </div>
+
+                        <div class="filter-actions">
+                            <button type="submit" class="btn btn-primary btn-block">APPLY FILTERS</button>
+                            <a href="/products" class="btn btn-underline btn-block text-center">RESET ALL</a>
+                        </div>
+                    </form>
+                </aside>
+
+                <!-- Product Display Grid -->
+                <div class="collection-products-wrapper">
+                    <% if (typeof products !== 'undefined' && products && products.length > 0) { %>
+                        <div class="product-grid grid-3-col">
+                            <% products.forEach(product => { %>
+                                <div class="product-card" data-id="<%= product._id %>">
+                                    <div class="card-image-wrapper">
+                                        <a href="/products/<%= product.slug || product._id %>">
+                                            <img src="<%= product.images && product.images.length > 0 ? product.images[0] : '/images/placeholder.jpg' %>" alt="<%= product.name %>" class="primary-image" loading="lazy" decoding="async">
+                                            <% if (product.images && product.images.length > 1) { %>
+                                                <img src="<%= product.images[1] %>" alt="<%= product.name %>" class="secondary-image" loading="lazy" decoding="async">
+                                            <% } %>
+                                        </a>
+
+                                        <!-- Wishlist Heart Button -->
+                                        <button type="button" class="wishlist-heart-btn" data-product-id="<%= product._id %>" aria-label="Add to Wishlist">
+                                            <i class="ri-heart-line"></i>
+                                        </button>
+
+                                        <!-- Quick Add / View Overlay -->
+                                        <div class="quick-add-overlay">
+                                            <a href="/products/<%= product.slug || product._id %>" class="btn-quick-view">VIEW DETAILS</a>
+                                        </div>
+                                    </div>
+
+                                    <div class="card-details">
+                                        <span class="card-brand"><%= product.brand || 'ALVORA' %></span>
+                                        <h3 class="card-name">
+                                            <a href="/products/<%= product.slug || product._id %>"><%= product.name %></a>
+                                        </h3>
+                                        <div class="card-price">
+                                            $<%= product.price ? product.price.toLocaleString('en-US', { minimumFractionDigits: 2 }) : '0.00' %>
+                                        </div>
+
+                                        <% if (product.sizes && product.sizes.length > 0) { %>
+                                            <div class="card-sizes">
+                                                <% product.sizes.forEach(size => { %>
+                                                    <span class="size-pill"><%= size %></span>
+                                                <% }); %>
+                                            </div>
+                                        <% } %>
+                                    </div>
+                                </div>
+                            <% }); %>
+                        </div>
+
+                        <!-- Pagination Navigation -->
+                        <% if (typeof totalPages !== 'undefined' && totalPages > 1) { %>
+                            <nav class="pagination-nav">
+                                <ul class="pagination-list">
+                                    <% if (currentPage > 1) { %>
+                                        <li>
+                                            <a href="?page=<%= currentPage - 1 %><%= typeof selectedCategory !== 'undefined' ? '&category=' + selectedCategory : '' %>" class="page-link prev">
+                                                <i class="ri-arrow-left-s-line"></i> PREV
+                                            </a>
+                                        </li>
+                                    <% } %>
+
+                                    <% for (let i = 1; i <= totalPages; i++) { %>
+                                        <li>
+                                            <a href="?page=<%= i %><%= typeof selectedCategory !== 'undefined' ? '&category=' + selectedCategory : '' %>" class="page-link <%= currentPage === i ? 'active' : '' %>">
+                                                <%= i %>
+                                            </a>
+                                        </li>
+                                    <% } %>
+
+                                    <% if (currentPage < totalPages) { %>
+                                        <li>
+                                            <a href="?page=<%= currentPage + 1 %><%= typeof selectedCategory !== 'undefined' ? '&category=' + selectedCategory : '' %>" class="page-link next">
+                                                NEXT <i class="ri-arrow-right-s-line"></i>
+                                            </a>
+                                        </li>
+                                    <% } %>
+                                </ul>
+                            </nav>
+                        <% } %>
+
+                    <% } else { %>
+                        <!-- No Products Found State -->
+                        <div class="no-products-found center">
+                            <i class="ri-shirt-line empty-icon"></i>
+                            <h2>No Creations Found</h2>
+                            <p>We could not find any products matching your selected criteria.</p>
+                            <a href="/products" class="btn btn-primary">VIEW ALL COLLECTIONS</a>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<%- include('layouts/footer') %>
+<%- include('layouts/scripts') %>
+

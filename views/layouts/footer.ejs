@@ -1,0 +1,125 @@
+<!-- Footer Newsletter / Brand Banner Section -->
+<section class="footer-newsletter-section">
+    <div class="footer-newsletter-container">
+        <div class="footer-newsletter-content">
+            <span class="editorial-subheading">THE ALVORA JOURNAL</span>
+            <h2 class="editorial-heading">Subscribe to the House Newsletter</h2>
+            <p class="editorial-text">
+                Be the first to receive invitation-only collection previews, editorial stories, and exclusive seasonal offerings.
+            </p>
+        </div>
+        <form action="/subscribe" method="POST" class="footer-newsletter-form">
+            <div class="newsletter-input-group">
+                <input 
+                    type="email" 
+                    name="email" 
+                    class="newsletter-input" 
+                    placeholder="Enter your email address" 
+                    required 
+                    autocomplete="email"
+                >
+                <button type="submit" class="newsletter-submit-btn">
+                    <span>JOIN</span>
+                    <i class="ri-arrow-right-line"></i>
+                </button>
+            </div>
+            <p class="newsletter-disclaimer">By subscribing, you agree to our <a href="/terms">Terms</a> and <a href="/privacy">Privacy Policy</a>.</p>
+        </form>
+    </div>
+</section>
+
+<!-- Main Footer Section -->
+<footer class="site-footer">
+    <div class="footer-container">
+        <!-- Top Row: Brand Statement -->
+        <div class="footer-brand-row">
+            <a href="/" class="footer-brand-logo">ALVORA</a>
+            <p class="footer-tagline">Architectural precision. Quiet luxury. Crafted for the modern connoisseur.</p>
+        </div>
+
+        <div class="footer-divider"></div>
+
+        <!-- Middle Row: Navigation Links Columns -->
+        <div class="footer-grid">
+            <!-- Column 1: Client Services -->
+            <div class="footer-column">
+                <h4 class="footer-column-title">CLIENT SERVICES</h4>
+                <ul class="footer-links">
+                    <li><a href="/orders">Order Status & Tracking</a></li>
+                    <li><a href="/returns">Returns & Exchanges</a></li>
+                    <li><a href="/shipping">Shipping & Delivery</a></li>
+                    <li><a href="/care-guide">Garment Care Guide</a></li>
+                    <li><a href="/contact">Book an Appointment</a></li>
+                </ul>
+            </div>
+
+            <!-- Column 2: About / The House -->
+            <div class="footer-column">
+                <h4 class="footer-column-title">THE HOUSE</h4>
+                <ul class="footer-links">
+                    <li><a href="/about">About ALVORA</a></li>
+                    <li><a href="/craftsmanship">Heritage & Craftsmanship</a></li>
+                    <li><a href="/sustainability">Sustainable Luxury</a></li>
+                    <li><a href="/press">Editorial & Press</a></li>
+                    <li><a href="/careers">Careers</a></li>
+                </ul>
+            </div>
+
+            <!-- Column 3: Legal & Terms -->
+            <div class="footer-column">
+                <h4 class="footer-column-title">LEGAL</h4>
+                <ul class="footer-links">
+                    <li><a href="/privacy">Privacy Policy</a></li>
+                    <li><a href="/terms">Terms & Conditions</a></li>
+                    <li><a href="/cookies">Cookie Preferences</a></li>
+                    <li><a href="/accessibility">Accessibility Statement</a></li>
+                </ul>
+            </div>
+
+            <!-- Column 4: Social & Global Presence -->
+            <div class="footer-column">
+                <h4 class="footer-column-title">CONNECT</h4>
+                <div class="footer-social-links">
+                    <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                        <i class="ri-instagram-line"></i>
+                        <span>Instagram</span>
+                    </a>
+                    <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+                        <i class="ri-facebook-fill"></i>
+                        <span>Facebook</span>
+                    </a>
+                    <a href="https://pinterest.com" target="_blank" rel="noopener noreferrer" aria-label="Pinterest">
+                        <i class="ri-pinterest-line"></i>
+                        <span>Pinterest</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-divider"></div>
+
+        <!-- Bottom Row: Copyright, Region & Payment Badges -->
+        <div class="footer-bottom">
+            <div class="footer-bottom-left">
+                <p class="copyright-text">&copy; <%= new Date().getFullYear() %> ALVORA. All Rights Reserved.</p>
+            </div>
+
+            <div class="footer-bottom-center">
+                <div class="region-selector">
+                    <i class="ri-global-line"></i>
+                    <span>GLOBAL / USD ($)</span>
+                </div>
+            </div>
+
+            <div class="footer-bottom-right">
+                <ul class="payment-methods" aria-label="Accepted Payment Options">
+                    <li><i class="ri-visa-line" title="Visa"></i></li>
+                    <li><i class="ri-mastercard-line" title="Mastercard"></i></li>
+                    <li><i class="ri-bank-card-line" title="American Express"></i></li>
+                    <li><i class="ri-apple-fill" title="Apple Pay"></i></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</footer>
+

@@ -1,0 +1,235 @@
+<%- include('layouts/header') %>
+<%- include('layouts/navbar') %>
+
+<main class="checkout-page-wrapper">
+    <!-- Checkout Header Banner -->
+    <section class="checkout-header-section">
+        <div class="container">
+            <div class="checkout-header-content center">
+                <span class="editorial-subheading">SECURE CHECKOUT</span>
+                <h1 class="checkout-title">Shipping & Billing Details</h1>
+                <p class="checkout-description">Please enter your delivery destination to complete your purchase order.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Checkout Main Body Section -->
+    <section class="section-padding checkout-body-section">
+        <div class="container">
+            <% 
+                let cartItems = [];
+                let subtotalAmount = 0;
+                let discountAmount = 0;
+                let totalAmount = 0;
+                if (typeof cart !== 'undefined' && cart && cart.items && cart.items.length > 0) {
+                    cartItems = cart.items;
+                    subtotalAmount = cart.subtotal || cart.items.reduce((acc, item) => {
+                        let itemPrice = item.product ? item.product.price : (item.price || 0);
+                        return acc + (itemPrice * item.quantity);
+                    }, 0);
+                    discountAmount = Number(cart.discountAmount || 0);
+                    totalAmount = Number(cart.total || (subtotalAmount - discountAmount));
+                }
+            %>
+
+            <div class="checkout-layout-grid">
+                <!-- Left: Shipping & Address Form -->
+                <div class="checkout-form-container">
+                    <form action="/orders/place" method="POST" class="checkout-form" id="checkoutForm">
+                        <div class="form-section">
+                            <h2 class="form-section-title">1. CONTACT INFORMATION</h2>
+                            <div class="form-grid">
+                                <div class="form-group full-width">
+                                    <label for="email" class="form-label">Email Address *</label>
+                                    <input 
+                                        type="email" 
+                                        id="email" 
+                                        name="email" 
+                                        class="form-control" 
+                                        value="<%= typeof user !== 'undefined' && user ? user.email : '' %>" 
+                                        required
+                                    >
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h2 class="form-section-title">2. SHIPPING ADDRESS</h2>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="fullName" class="form-label">Full Customer Name *</label>
+                                    <input 
+                                        type="text" 
+                                        id="fullName" 
+                                        name="fullName" 
+                                        class="form-control" 
+                                        value="<%= typeof user !== 'undefined' && user ? user.name : '' %>" 
+                                        required
+                                    >
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="phone" class="form-label">Phone Number *</label>
+                                    <input 
+                                        type="tel" 
+                                        id="phone" 
+                                        name="phone" 
+                                        class="form-control" 
+                                        placeholder="+1 (555) 000-0000" 
+                                        required
+                                    >
+                                </div>
+
+                                <div class="form-group full-width">
+                                    <label for="street" class="form-label">Street Address *</label>
+                                    <input 
+                                        type="text" 
+                                        id="street" 
+                                        name="street" 
+                                        class="form-control" 
+                                        placeholder="Apartment, suite, unit, street address" 
+                                        required
+                                    >
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="city" class="form-label">City *</label>
+                                    <input type="text" id="city" name="city" class="form-control" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="state" class="form-label">State / Province / Region *</label>
+                                    <input type="text" id="state" name="state" class="form-control" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="country" class="form-label">Country *</label>
+                                    <select id="country" name="country" class="form-control" required>
+                                        <option value="United States" selected>United States</option>
+                                        <option value="United Kingdom">United Kingdom</option>
+                                        <option value="Canada">Canada</option>
+                                        <option value="France">France</option>
+                                        <option value="Germany">Germany</option>
+                                        <option value="Italy">Italy</option>
+                                        <option value="Japan">Japan</option>
+                                        <option value="Australia">Australia</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="pincode" class="form-label">Pincode / Postal Code *</label>
+                                    <input type="text" id="pincode" name="pincode" class="form-control" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h2 class="form-section-title">3. PAYMENT METHOD</h2>
+                            <div class="payment-selection-box">
+                                <div class="payment-option active">
+                                    <i class="ri-shield-keyhole-line"></i>
+                                    <div>
+                                        <strong>Encrypted Express Payment Gateway</strong>
+                                        <p class="text-muted">Secure transaction protocol provided by ALVORA Banking System.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-submit-wrapper">
+                            <button type="submit" class="btn btn-primary btn-block btn-place-order">
+                                PLACE ORDER & PAY NOW
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+
+
+                <!-- Right: Order Summary -->
+                <aside class="checkout-summary-sidebar">
+                    <div class="summary-card">
+                        <h2 class="summary-title">YOUR ORDER SUMMARY</h2>
+                        <div class="summary-divider"></div>
+
+                        <!-- Mini Cart Items List -->
+                        <div class="mini-order-items">
+                            <% if (cartItems && cartItems.length > 0) { %>
+                                <% cartItems.forEach(item => { %>
+                                    <% let product = item.product; %>
+                                    <% if (product) { %>
+                                        <div class="mini-item-row">
+                                            <div class="mini-item-img">
+                                                <img src="<%= product.images && product.images.length > 0 ? product.images[0] : '/images/placeholder.jpg' %>" alt="<%= product.name %>">
+                                            </div>
+                                            <div class="mini-item-info">
+                                                <span class="mini-item-name"><%= product.name %></span>
+                                                <% if (item.size) { %>
+                                                    <span class="mini-item-size">Size: <%= item.size %></span>
+                                                <% } %>
+                                                
+                                                <!-- Mini Checkout Stepper -->
+                                                <form action="/cart/update" method="POST" class="checkout-qty-form" style="margin-top: 5px; display: inline-flex; align-items: center; border: 1px solid #EAE3D2; border-radius: 4px; padding: 2px;">
+                                                    <input type="hidden" name="itemId" value="<%= item.id || item._id %>">
+                                                    <button type="button" name="action" value="decrease" class="checkout-qty-btn decrease" style="background:none; border:none; padding: 0 5px; cursor: pointer; color: #060B11;">-</button>
+                                                    <input type="number" name="quantity" class="checkout-qty-input" value="<%= item.quantity %>" min="1" readonly style="width: 25px; text-align: center; background: none; border: none; font-size: 0.8rem; color: #060B11; padding: 0; appearance: none; -moz-appearance: textfield;" />
+                                                    <button type="button" name="action" value="increase" class="checkout-qty-btn increase" style="background:none; border:none; padding: 0 5px; cursor: pointer; color: #060B11;">+</button>
+                                                </form>
+                                                
+                                                <form action="/cart/remove/<%= item.id || item._id %>" method="POST" style="display: inline-block; margin-left: 10px;">
+                                                    <input type="hidden" name="itemId" value="<%= item.id || item._id %>">
+                                                    <button type="submit" style="background:none; border:none; color: #d9534f; cursor: pointer; font-size: 0.75rem; font-weight: 600; padding: 0; text-decoration: underline;">
+                                                        REMOVE
+                                                    </button>
+                                                </form>
+                                            </div>
+                                            <div class="mini-item-price">
+                                                $<%= ((product.price || 0) * item.quantity).toLocaleString('en-US', { minimumFractionDigits: 2 }) %>
+                                            </div>
+                                        </div>
+                                    <% } %>
+                                <% }); %>
+                            <% } %>
+                        </div>
+
+                        <div class="summary-divider"></div>
+
+                        <div class="summary-row">
+                            <span>Subtotal</span>
+                            <span>$<%= subtotalAmount.toLocaleString('en-US', { minimumFractionDigits: 2 }) %></span>
+                        </div>
+
+                        <% if (discountAmount > 0) { %>
+                            <div class="summary-row discount-row">
+                                <span>Discount (<%= cart.coupon && cart.coupon.code ? cart.coupon.code : 'Applied' %>)</span>
+                                <span>-$<%= discountAmount.toLocaleString('en-US', { minimumFractionDigits: 2 }) %></span>
+                            </div>
+                        <% } %>
+
+                        <div class="summary-row">
+                            <span>Express Shipping</span>
+                            <span class="shipping-value">COMPLIMENTARY</span>
+                        </div>
+
+                        <div class="summary-row">
+                            <span>Estimated Taxes</span>
+                            <span>Included</span>
+                        </div>
+
+                        <div class="summary-divider"></div>
+
+                        <div class="summary-row total-row">
+                            <span>Total Due</span>
+                            <span class="total-amount">$<%= totalAmount.toLocaleString('en-US', { minimumFractionDigits: 2 }) %></span>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </section>
+</main>
+
+<%- include('layouts/footer') %>
+<%- include('layouts/scripts') %>
+
+

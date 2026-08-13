@@ -1,0 +1,200 @@
+<%- include('layouts/header') %>
+<%- include('layouts/navbar') %>
+
+<main class="cart-page-wrapper">
+    <!-- Header Banner -->
+    <section class="cart-header-section">
+        <div class="container">
+            <div class="cart-header-content center">
+                <span class="editorial-subheading">YOUR SELECTION</span>
+                <h1 class="cart-title">Shopping Bag</h1>
+                <p class="cart-description">Review your selected garments before proceeding to complimentary express delivery.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cart Body Section -->
+    <section class="section-padding cart-body-section">
+        <div class="container">
+            <% 
+                let cartItems = [];
+                let subtotalAmount = 0;
+                let discountAmount = 0;
+                if (typeof cart !== 'undefined' && cart && cart.items && cart.items.length > 0) {
+                    cartItems = cart.items;
+                    subtotalAmount = cart.subtotal || cart.items.reduce((acc, item) => {
+                        let itemPrice = item.product ? item.product.price : (item.price || 0);
+                        return acc + (itemPrice * item.quantity);
+                    }, 0);
+                    discountAmount = cart.discountAmount || 0;
+                }
+            %>
+
+            <% if (cartItems && cartItems.length > 0) { %>
+                <div class="cart-layout-grid">
+                    <!-- Left: Cart Items List -->
+                    <div class="cart-items-container">
+                        <div class="cart-table-header">
+                            <span class="col-product">PRODUCT</span>
+                            <span class="col-quantity">QUANTITY</span>
+                            <span class="col-total">TOTAL</span>
+                        </div>
+
+                        <div class="cart-items-list">
+                            <% cartItems.forEach((item, index) => { %>
+                                <% let product = item.product; %>
+                                <% if (product) { %>
+                                    <div class="cart-item-row" data-cart-item-id="<%= item._id || index %>">
+                                        <!-- Product Image & Meta -->
+                                        <div class="col-product item-product-info">
+                                            <div class="item-thumbnail">
+                                                <a href="/products/<%= product.slug || product._id %>">
+                                                    <img 
+                                                        src="<%= product.images && product.images.length > 0 ? product.images[0] : '/images/placeholder.jpg' %>" 
+                                                        alt="<%= product.name %>"
+                                                    >
+                                                </a>
+                                            </div>
+                                            <div class="item-details">
+                                                <span class="item-brand"><%= product.brand || 'ALVORA' %></span>
+                                                <h3 class="item-name">
+                                                    <a href="/products/<%= product.slug || product._id %>"><%= product.name %></a>
+                                                </h3>
+                                                <% if (item.size) { %>
+                                                    <span class="item-size-tag">SIZE: <%= item.size %></span>
+                                                <% } %>
+                                                <div class="item-unit-price">
+                                                    $<%= product.price ? product.price.toLocaleString('en-US', { minimumFractionDigits: 2 }) : '0.00' %>
+                                                </div>
+
+                                                <!-- Remove Button -->
+                                                <form action="/cart/remove/<%= item._id %>" method="POST" class="remove-item-form">
+                                                    <input type="hidden" name="itemId" value="<%= item._id %>">
+                                                    <input type="hidden" name="productId" value="<%= product._id %>">
+                                                    <button type="submit" class="btn-remove-item">
+                                                        <i class="ri-delete-bin-line"></i> Remove
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+
+                                        <!-- Quantity Stepper -->
+                                        <div class="col-quantity item-quantity-control">
+                                            <form action="/cart/update" method="POST" class="update-qty-form">
+                                                <input type="hidden" name="itemId" value="<%= item._id %>">
+                                                <input type="hidden" name="productId" value="<%= product._id %>">
+                                                <div class="quantity-stepper">
+                                                    <button type="submit" name="action" value="decrease" class="qty-btn">-</button>
+                                                    <input type="number" name="quantity" value="<%= item.quantity %>" min="1" readonly>
+                                                    <button type="submit" name="action" value="increase" class="qty-btn">+</button>
+                                                </div>
+                                            </form>
+                                        </div>
+
+                                        <!-- Line Item Total -->
+                                        <div class="col-total item-total-price">
+                                            $<%= ((product.price || 0) * item.quantity).toLocaleString('en-US', { minimumFractionDigits: 2 }) %>
+                                        </div>
+                                    </div>
+                                <% } %>
+                            <% }); %>
+                        </div>
+
+                        <!-- Back to Shop Link -->
+                        <div class="cart-actions-row">
+                            <a href="/products" class="btn btn-underline">
+                                &larr; CONTINUE SHOPPING
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Right: Order Summary Sidebar -->
+                    <aside class="cart-summary-sidebar">
+                        <div class="summary-card">
+                            <h2 class="summary-title">ORDER SUMMARY</h2>
+                            <div class="summary-divider"></div>
+
+                            <!-- Coupon Code Form -->
+                            <form action="/cart/coupon" method="POST" class="coupon-form">
+                                <label for="couponCode" class="coupon-label">PROMOTIONAL CODE</label>
+                                <div class="coupon-input-group">
+                                    <input 
+                                        type="text" 
+                                        id="couponCode" 
+                                        name="code" 
+                                        placeholder="Enter code" 
+                                        value="<%= typeof cart !== 'undefined' && cart.coupon ? cart.coupon.code : '' %>"
+                                    >
+                                    <button type="submit" class="btn btn-outline btn-coupon-apply">APPLY</button>
+                                </div>
+                            </form>
+
+                            <div class="summary-divider"></div>
+
+                            <!-- Line Calculations -->
+                            <div class="summary-row">
+                                <span>Subtotal</span>
+                                <span>$<%= subtotalAmount.toLocaleString('en-US', { minimumFractionDigits: 2 }) %></span>
+                            </div>
+
+                            <% if (discountAmount > 0) { %>
+                                <div class="summary-row discount-row">
+                                    <span>Discount (<%= cart && cart.coupon ? cart.coupon.code : 'Applied' %>)</span>
+                                    <span>-$<%= discountAmount.toLocaleString('en-US', { minimumFractionDigits: 2 }) %></span>
+                                </div>
+                            <% } %>
+
+                            <div class="summary-row">
+                                <span>Shipping</span>
+                                <span class="shipping-value">COMPLIMENTARY</span>
+                            </div>
+
+                            <div class="summary-row">
+                                <span>Estimated Taxes</span>
+                                <span>Calculated at checkout</span>
+                            </div>
+
+                            <div class="summary-divider"></div>
+
+                            <div class="summary-row total-row">
+                                <span>Estimated Total</span>
+                                <span class="total-amount">
+                                    $<%= (subtotalAmount - discountAmount).toLocaleString('en-US', { minimumFractionDigits: 2 }) %>
+                                </span>
+                            </div>
+
+                            <!-- Checkout CTA -->
+                            <a href="/cart/checkout" class="btn btn-primary btn-block btn-checkout">
+                                PROCEED TO CHECKOUT
+                            </a>
+                            
+                            <!-- Clear Cart CTA -->
+                            <form action="/cart/clear" method="POST" style="margin-top: 15px;">
+                                <button type="submit" class="btn btn-outline btn-block" style="border-color: #d9534f; color: #d9534f;" onclick="return confirm('Are you sure you want to clear your entire shopping bag?');">
+                                    CLEAR CART
+                                </button>
+                            </form>
+
+                            <div class="security-guarantee">
+                                <i class="ri-shield-check-line"></i>
+                                <span>Encrypted 256-bit Secure Checkout</span>
+                            </div>
+                        </div>
+                    </aside>
+                </div>
+            <% } else { %>
+                <!-- Empty Cart State -->
+                <div class="empty-cart-container center">
+                    <i class="ri-shopping-bag-line empty-cart-icon"></i>
+                    <h2>Your Shopping Bag is Empty</h2>
+                    <p>Discover our newest quiet luxury arrivals and curated seasonal edits.</p>
+                    <a href="/products" class="btn btn-primary margin-top-lg">EXPLORE COLLECTIONS</a>
+                </div>
+            <% } %>
+        </div>
+    </section>
+</main>
+
+<%- include('layouts/footer') %>
+<%- include('layouts/scripts') %>
+

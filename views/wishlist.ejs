@@ -1,0 +1,102 @@
+<%- include('layouts/header') %>
+<%- include('layouts/navbar') %>
+
+<main class="wishlist-page-wrapper">
+    <!-- Header Banner -->
+    <section class="wishlist-header-section">
+        <div class="container">
+            <div class="wishlist-header-content center">
+                <span class="editorial-subheading">PERSONAL ARCHIVE</span>
+                <h1 class="wishlist-title">Your Saved Wishlist</h1>
+                <p class="wishlist-description">A curated collection of your favorite ALVORA creations saved for later acquisition.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Wishlist Items Section -->
+    <section class="section-padding wishlist-body-section">
+        <div class="container">
+            <% 
+                let savedItems = [];
+                if (typeof wishlist !== 'undefined' && wishlist) {
+                    if (Array.isArray(wishlist)) {
+                        savedItems = wishlist;
+                    } else if (wishlist.products && Array.isArray(wishlist.products)) {
+                        savedItems = wishlist.products;
+                    } else if (wishlist.items && Array.isArray(wishlist.items)) {
+                        savedItems = wishlist.items;
+                    }
+                } else if (typeof favorites !== 'undefined' && favorites) {
+                    if (Array.isArray(favorites)) {
+                        savedItems = favorites;
+                    } else if (favorites.products && Array.isArray(favorites.products)) {
+                        savedItems = favorites.products;
+                    }
+                }
+            %>
+
+            <% if (savedItems && savedItems.length > 0) { %>
+                <div class="wishlist-grid grid-3-col">
+                    <% savedItems.forEach(item => { %>
+                        <% let product = item.product || item; %>
+                        <% if (product && product._id) { %>
+                            <div class="product-card wishlist-card" data-product-id="<%= product._id %>">
+                                <div class="card-image-wrapper">
+                                    <a href="/products/<%= product.slug || product._id %>">
+                                        <img 
+                                            src="<%= product.images && product.images.length > 0 ? product.images[0] : '/images/placeholder.jpg' %>" 
+                                            alt="<%= product.name %>"
+                                            class="primary-image"
+                                        >
+                                    </a>
+
+                                    <!-- Remove Item Button -->
+                                    <form action="/wishlist/remove/<%= product._id %>" method="POST" class="remove-wishlist-form">
+                                        <input type="hidden" name="productId" value="<%= product._id %>">
+                                        <button type="submit" class="wishlist-remove-btn" title="Remove from wishlist" aria-label="Remove item">
+                                            <i class="ri-close-line"></i>
+                                        </button>
+                                    </form>
+                                </div>
+
+                                <div class="card-details">
+                                    <span class="card-brand"><%= product.brand || 'ALVORA' %></span>
+                                    <h3 class="card-name">
+                                        <a href="/products/<%= product.slug || product._id %>"><%= product.name %></a>
+                                    </h3>
+                                    <div class="card-price">
+                                        $<%= product.price ? product.price.toLocaleString('en-US', { minimumFractionDigits: 2 }) : '0.00' %>
+                                    </div>
+
+                                    <!-- Move to Cart Form -->
+                                    <form action="/wishlist/move-to-cart" method="POST" class="move-to-cart-form">
+                                        <input type="hidden" name="productId" value="<%= product._id %>">
+                                        <input type="hidden" name="quantity" value="1">
+                                        <% if (product.sizes && product.sizes.length > 0) { %>
+                                            <input type="hidden" name="size" value="<%= product.sizes[0] %>">
+                                        <% } %>
+                                        <button type="submit" class="btn btn-primary btn-block btn-move-cart">
+                                            <i class="ri-shopping-bag-3-line"></i> MOVE TO CART
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        <% } %>
+                    <% }); %>
+                </div>
+            <% } else { %>
+                <!-- Empty Wishlist State -->
+                <div class="empty-wishlist-container center">
+                    <i class="ri-heart-3-line empty-wishlist-icon"></i>
+                    <h2>Your Wishlist is Empty</h2>
+                    <p>Explore our collections and save your favorite garments to review them anytime.</p>
+                    <a href="/products" class="btn btn-primary margin-top-lg">DISCOVER COLLECTIONS</a>
+                </div>
+            <% } %>
+        </div>
+    </section>
+</main>
+
+<%- include('layouts/footer') %>
+<%- include('layouts/scripts') %>
+

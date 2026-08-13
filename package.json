@@ -1,0 +1,39 @@
+{
+  "name": "alvora",
+  "version": "1.0.0",
+  "description": "ALVORA - Elevated Leisure. Quiet Prestige. Premium Luxury Fashion E-Commerce Platform.",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "keywords": [
+    "alvora",
+    "luxury-fashion",
+    "e-commerce",
+    "express",
+    "ejs",
+    "passport",
+    "cloudinary"
+  ],
+  "author": "ALVORA Maison",
+  "license": "ISC",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.112.3",
+    "cloudinary": "^1.41.3",
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.10",
+    "express": "^4.19.2",
+    "express-session": "^1.18.0",
+    "multer": "^1.4.5-lts.1",
+    "multer-storage-cloudinary": "^4.0.0",
+    "passport": "^0.7.0",
+    "passport-google-oauth20": "^2.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.3"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

@@ -1,0 +1,157 @@
+<%- include('layouts/header') %>
+<%- include('layouts/navbar') %>
+
+<main class="admin-dashboard-wrapper">
+    <!-- Admin Header Banner -->
+    <section class="admin-header-section">
+        <div class="container">
+            <div class="admin-header-content">
+                <div>
+                    <span class="editorial-subheading text-gold">ATELIER MANAGEMENT</span>
+                    <h1 class="admin-title">Admin Dashboard</h1>
+                    <p class="admin-description">Catalogue management, inventory control, and product creation portal.</p>
+                </div>
+                <div class="admin-header-actions">
+                    <a href="/admin/add-product" class="btn btn-gold btn-add-product">
+                        <i class="ri-add-line"></i> ADD NEW CREATION
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Admin Content Section -->
+    <section class="section-padding admin-body-section">
+        <div class="container">
+            <!-- Security Check Safeguard -->
+            <% if ((typeof isOgAdmin !== 'undefined' && isOgAdmin) || (typeof isSubAdmin !== 'undefined' && isSubAdmin)) { %>
+                
+                <!-- Quick Inventory Stats Bar -->
+                <div class="admin-stats-grid">
+                    <div class="stat-card">
+                        <span class="stat-label">TOTAL PRODUCTS</span>
+                        <span class="stat-number"><%= typeof products !== 'undefined' ? products.length : 0 %></span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-label">ACTIVE ATELIER EMAIL</span>
+                        <span class="stat-value"><%= user.email %></span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-label">CATALOG STATUS</span>
+                        <span class="stat-value text-success">Live & Synchronized</span>
+                    </div>
+                </div>
+
+                <!-- Products Catalogue Management Table -->
+                <div class="admin-table-container">
+                    <div class="table-header-bar">
+                        <h2>PRODUCT CATALOGUE</h2>
+                        <a href="/admin/add-product" class="btn btn-outline btn-sm">+ Add Product</a>
+                    </div>
+
+                    <% if (typeof products !== 'undefined' && products && products.length > 0) { %>
+                        <div class="table-responsive">
+                            <table class="admin-products-table">
+                                <thead>
+                                    <tr>
+                                        <th>GARMENT</th>
+                                        <th>NAME</th>
+                                        <th>BRAND</th>
+                                        <th>CATEGORY</th>
+                                        <th>PRICE</th>
+                                        <th>INVENTORY</th>
+                                        <th>ACTIONS</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% products.forEach(product => { %>
+                                        <tr>
+                                            <!-- Thumbnail Image -->
+                                            <td class="td-image">
+                                                <img 
+                                                    src="<%= product.images && product.images.length > 0 ? product.images[0] : '/images/placeholder.jpg' %>" 
+                                                    alt="<%= product.name %>" 
+                                                    class="admin-product-thumb"
+                                                >
+                                            </td>
+
+                                            <!-- Name & ID -->
+                                            <td class="td-name">
+                                                <a href="/products/<%= product.slug || product._id %>" class="product-name-link"><%= product.name %></a>
+                                                <span class="product-id-sub">ID: <%= product._id %></span>
+                                            </td>
+
+                                            <!-- Brand -->
+                                            <td><%= product.brand || 'ALVORA' %></td>
+
+                                            <!-- Category -->
+                                            <td>
+                                                <span class="category-pill"><%= (product.category || 'General').toUpperCase() %></span>
+                                            </td>
+
+                                            <!-- Price -->
+                                            <td class="td-price">
+                                                $<%= product.price ? product.price.toLocaleString('en-US', { minimumFractionDigits: 2 }) : '0.00' %>
+                                            </td>
+
+                                            <!-- Inventory / Stock -->
+                                            <td class="td-stock">
+                                                <% if (product.stock === null) { %>
+                                                    <span class="stock-badge">Not tracked</span>
+                                                <% } else if (product.stock > 5) { %>
+                                                    <span class="stock-badge in-stock"><%= product.stock %> in stock</span>
+                                                <% } else if (product.stock > 0) { %>
+                                                    <span class="stock-badge low-stock"><%= product.stock %> left</span>
+                                                <% } else { %>
+                                                    <span class="stock-badge out-stock">Out of stock</span>
+                                                <% } %>
+                                            </td>
+
+                                            <!-- Action Buttons (Edit & Delete) -->
+                                            <td class="td-actions">
+                                                <div class="action-buttons-group">
+                                                    <% if ((typeof isOgAdmin !== 'undefined' && isOgAdmin) || String(product.creator_id) === String(user.id || user._id)) { %>
+                                                        <a href="/admin/edit-product/<%= product._id %>" class="btn-action edit-btn" title="Edit Product">
+                                                            <i class="ri-edit-line"></i> Edit
+                                                        </a>
+
+                                                        <form action="/admin/delete-product/<%= product._id %>" method="POST" class="delete-product-form" onsubmit="return confirm('Are you certain you wish to archive this garment from the catalogue?');">
+                                                            <button type="submit" class="btn-action delete-btn" title="Delete Product">
+                                                                <i class="ri-delete-bin-line"></i> Delete
+                                                            </button>
+                                                        </form>
+                                                    <% } else { %>
+                                                        <span class="text-muted" style="font-size: 0.75rem; font-style: italic; color: #888;">No Permission</span>
+                                                    <% } %>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    <% }); %>
+                                </tbody>
+                            </table>
+                        </div>
+                    <% } else { %>
+                        <div class="admin-empty-state center">
+                            <i class="ri-archive-line empty-icon"></i>
+                            <h3>Catalogue is Empty</h3>
+                            <p>No products currently exist in the database. Add your first creation now.</p>
+                            <a href="/admin/add-product" class="btn btn-primary margin-top-lg">ADD FIRST PRODUCT</a>
+                        </div>
+                    <% } %>
+                </div>
+
+            <% } else { %>
+                <!-- Access Denied State -->
+                <div class="access-denied-box center">
+                    <i class="ri-shield-keyhole-line text-danger denied-icon"></i>
+                    <h2>Access Denied</h2>
+                    <p>You do not possess administrative access privileges for the ALVORA Atelier Management Portal.</p>
+                    <a href="/" class="btn btn-primary margin-top-lg">RETURN TO HOMEPAGE</a>
+                </div>
+            <% } %>
+        </div>
+    </section>
+</main>
+
+<%- include('layouts/footer') %>
+<%- include('layouts/scripts') %>

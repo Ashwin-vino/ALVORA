@@ -1,0 +1,231 @@
+<%- include('layouts/header') %>
+<%- include('layouts/navbar') %>
+
+<main class="product-detail-page-wrapper">
+    <!-- Breadcrumb Navigation -->
+    <nav class="breadcrumb-nav" aria-label="Breadcrumb">
+        <div class="container">
+            <ol class="breadcrumb-list">
+                <li><a href="/">Home</a></li>
+                <li><a href="/products">Collections</a></li>
+                <% if (product && product.category) { %>
+                    <li><a href="/products/category/<%= product.category.toLowerCase() %>"><%= product.category.toUpperCase() %></a></li>
+                <% } %>
+                <li class="active" aria-current="page"><%= product ? product.name : 'Product Details' %></li>
+            </ol>
+        </div>
+    </nav>
+
+    <!-- Product Detail Section -->
+    <% if (product) { %>
+    <section class="product-main-section section-padding-bottom">
+        <div class="container">
+            <div class="product-detail-layout">
+                <!-- Left: Product Image Gallery -->
+                <div class="product-gallery-container">
+                    <div class="gallery-main-display">
+                        <div class="image-zoom-container" id="imageZoomBox">
+                            <img 
+                                src="<%= product.images && product.images.length > 0 ? product.images[0] : '/images/placeholder.jpg' %>" 
+                                alt="<%= product.name %>" 
+                                id="mainProductImage"
+                                class="main-featured-img"
+                                data-zoom="<%= product.images && product.images.length > 0 ? product.images[0] : '/images/placeholder.jpg' %>"
+                            >
+                        </div>
+                        <button type="button" class="gallery-fullscreen-btn" id="fullScreenBtn" aria-label="Expand image">
+                            <i class="ri-fullscreen-line"></i>
+                        </button>
+                    </div>
+
+                    <% if (product.images && product.images.length > 1) { %>
+                        <div class="gallery-thumbnails-strip">
+                            <% product.images.forEach((imgUrl, index) => { %>
+                                <button 
+                                    type="button" 
+                                    class="thumb-btn <%= index === 0 ? 'active' : '' %>" 
+                                    data-image-src="<%= imgUrl %>"
+                                    aria-label="View product image <%= index + 1 %>"
+                                >
+                                    <img src="<%= imgUrl %>" alt="<%= product.name %> thumbnail <%= index + 1 %>">
+                                </button>
+                            <% }); %>
+                        </div>
+                    <% } %>
+                </div>
+
+                <!-- Right: Product Purchase & Info Panel -->
+                <div class="product-info-container">
+                    <div class="product-header-meta">
+                        <span class="product-brand-tag"><%= product.brand || 'ALVORA ATELIER' %></span>
+                        <h1 class="product-title-heading"><%= product.name %></h1>
+                        <div class="product-price-row">
+                            <span class="price-amount">$<%= product.price ? product.price.toLocaleString('en-US', { minimumFractionDigits: 2 }) : '0.00' %></span>
+                            <span class="tax-shipping-note">Taxes included. Free express shipping on orders over $500.</span>
+                        </div>
+                    </div>
+
+                    <div class="product-divider"></div>
+
+                    <!-- Add to Cart Form -->
+                    <form action="/cart/add" method="POST" class="product-purchase-form" id="addToCartForm">
+                        <input type="hidden" name="productId" value="<%= product._id %>">
+
+                        <!-- Size Selection -->
+                        <% if (product.sizes && product.sizes.length > 0) { %>
+                            <div class="purchase-option-group">
+                                <div class="option-header">
+                                    <label class="option-label">SELECT SIZE</label>
+                                    <button type="button" class="size-guide-trigger" id="sizeGuideBtn">
+                                        <i class="ri-ruler-line"></i> Size Guide
+                                    </button>
+                                </div>
+                                <div class="size-selector-grid">
+                                    <% product.sizes.forEach((size, idx) => { %>
+                                        <label class="size-radio-label">
+                                            <input 
+                                                type="radio" 
+                                                name="size" 
+                                                value="<%= size %>" 
+                                                <%= idx === 0 ? 'required' : '' %>
+                                            >
+                                            <span class="size-radio-box"><%= size %></span>
+                                        </label>
+                                    <% }); %>
+                                </div>
+                            </div>
+                        <% } %>
+
+                        <!-- Quantity Selection -->
+                        <div class="purchase-option-group">
+                            <label class="option-label" for="quantityInput">QUANTITY</label>
+                            <div class="quantity-stepper">
+                                <button type="button" class="qty-btn decrement" id="qtyDecrement" aria-label="Decrease quantity">-</button>
+                                <input type="number" id="quantityInput" name="quantity" value="1" min="1" max="<%= product.stock || 10 %>" readonly>
+                                <button type="button" class="qty-btn increment" id="qtyIncrement" aria-label="Increase quantity">+</button>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="purchase-action-group">
+                            <button type="submit" class="btn btn-primary btn-add-cart">
+                                <i class="ri-shopping-bag-3-line"></i> ADD TO CART
+                            </button>
+
+                            <button type="submit" class="btn btn-secondary btn-buy-now" formmethod="POST" formaction="/cart/buy-now">
+                                BUY NOW
+                            </button>
+
+                            <button 
+                                type="button" 
+                                class="btn-wishlist-toggle" 
+                                data-product-id="<%= product._id %>" 
+                                title="Add to Wishlist"
+                                aria-label="Add to Wishlist"
+                            >
+                                <i class="ri-heart-3-line"></i>
+                            </button>
+                        </div>
+                    </form>
+
+                    <div class="product-divider"></div>
+
+                    <!-- Accordion Details (Description, Fabric, Care & Delivery) -->
+                    <div class="product-accordion-group">
+                        <!-- Description -->
+                        <details class="accordion-item" open>
+                            <summary class="accordion-header">
+                                <span>DESCRIPTION & DETAILS</span>
+                                <i class="ri-add-line accordion-icon"></i>
+                            </summary>
+                            <div class="accordion-content">
+                                <p><%= product.description || 'Crafted with precision, this garment combines quiet luxury aesthetics with world-class tailoring standards.' %></p>
+                            </div>
+                        </details>
+
+                        <!-- Fabric & Composition -->
+                        <details class="accordion-item">
+                            <summary class="accordion-header">
+                                <span>FABRIC & COMPOSITION</span>
+                                <i class="ri-add-line accordion-icon"></i>
+                            </summary>
+                            <div class="accordion-content">
+                                <p><%= product.fabric || '100% Pure Mongolian Cashmere & Mulberry Silk Lining.' %></p>
+                            </div>
+                        </details>
+
+                        <!-- Care Instructions -->
+                        <details class="accordion-item">
+                            <summary class="accordion-header">
+                                <span>GARMENT CARE</span>
+                                <i class="ri-add-line accordion-icon"></i>
+                            </summary>
+                            <div class="accordion-content">
+                                <p><%= product.care || 'Specialist dry clean only. Store in breathable garment bag. Cool iron if required.' %></p>
+                            </div>
+                        </details>
+
+                        <!-- Complimentary Shipping & Returns -->
+                        <details class="accordion-item">
+                            <summary class="accordion-header">
+                                <span>COMPLIMENTARY SHIPPING & RETURNS</span>
+                                <i class="ri-add-line accordion-icon"></i>
+                            </summary>
+                            <div class="accordion-content">
+                                <p>Free express DHL shipping on all domestic and international orders over $500. Complimentary 14-day global returns and exchanges.</p>
+                            </div>
+                        </details>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Related Products Carousel / Grid -->
+    <% if (typeof relatedProducts !== 'undefined' && relatedProducts && relatedProducts.length > 0) { %>
+    <section class="related-products-section section-padding-top">
+        <div class="container">
+            <div class="section-header center">
+                <span class="section-subtitle">COMPLEMENTARY CREATIONS</span>
+                <h2 class="section-title">You May Also Admire</h2>
+                <div class="title-underline"></div>
+            </div>
+
+            <div class="product-grid grid-4-col">
+                <% relatedProducts.forEach(relProduct => { %>
+                    <div class="product-card" data-id="<%= relProduct._id %>">
+                        <div class="card-image-wrapper">
+                            <a href="/products/<%= relProduct.slug || relProduct._id %>">
+                                <img src="<%= relProduct.images && relProduct.images.length > 0 ? relProduct.images[0] : '/images/placeholder.jpg' %>" alt="<%= relProduct.name %>" class="primary-image">
+                                <% if (relProduct.images && relProduct.images.length > 1) { %>
+                                    <img src="<%= relProduct.images[1] %>" alt="<%= relProduct.name %>" class="secondary-image">
+                                <% } %>
+                            </a>
+                            <button type="button" class="wishlist-heart-btn" data-product-id="<%= relProduct._id %>">
+                                <i class="ri-heart-line"></i>
+                            </button>
+                        </div>
+                        <div class="card-details">
+                            <span class="card-brand"><%= relProduct.brand || 'ALVORA' %></span>
+                            <h3 class="card-name"><a href="/products/<%= relProduct.slug || relProduct._id %>"><%= relProduct.name %></a></h3>
+                            <div class="card-price">$<%= relProduct.price ? relProduct.price.toLocaleString('en-US', { minimumFractionDigits: 2 }) : '0.00' %></div>
+                        </div>
+                    </div>
+                <% }); %>
+            </div>
+        </div>
+    </section>
+    <% } %>
+
+    <% } else { %>
+        <div class="container section-padding text-center">
+            <h2>Creation Not Found</h2>
+            <p>The requested garment is currently unavailable or has been archived.</p>
+            <a href="/products" class="btn btn-primary">RETURN TO COLLECTIONS</a>
+        </div>
+    <% } %>
+</main>
+
+<%- include('layouts/footer') %>
+<%- include('layouts/scripts') %>
+

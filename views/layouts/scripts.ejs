@@ -1,0 +1,33 @@
+<!-- Core JavaScript Libraries -->
+<script src="/js/navbar.js" defer></script>
+<script src="/js/animations.js" defer></script>
+<script src="/js/favorites.js" defer></script>
+<script src="/js/commerce.js" defer></script>
+
+<!-- Global Toast / Flash Notification Handler -->
+<% if (typeof success_msg !== 'undefined' && success_msg && success_msg.length > 0) { %>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            if (window.ALVORA && window.ALVORA.showNotification) {
+                window.ALVORA.showNotification("<%= success_msg %>", "success");
+            } else {
+                alert("<%= success_msg %>");
+            }
+        });
+    </script>
+<% } %>
+
+<% if (typeof error_msg !== 'undefined' && error_msg && error_msg.length > 0) { %>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            if (window.ALVORA && window.ALVORA.showNotification) {
+                window.ALVORA.showNotification("<%= error_msg %>", "error");
+            } else {
+                alert("<%= error_msg %>");
+            }
+        });
+    </script>
+<% } %>
+
+</body>
+</html>

@@ -1,0 +1,101 @@
+<%- include('layouts/header') %>
+<%- include('layouts/navbar') %>
+
+<main class="admin-page-wrapper">
+    <!-- Header Banner -->
+    <section class="admin-header-section">
+        <div class="container">
+            <div class="admin-header-content">
+                <div>
+                    <span class="editorial-subheading text-gold">ATELIER MANAGEMENT</span>
+                    <h1 class="admin-title">Add New Creation</h1>
+                    <p class="admin-description">Upload high-resolution editorial imagery, specifications, and stock details for new apparel.</p>
+                </div>
+                <div>
+                    <a href="/admin" class="btn btn-outline">&larr; BACK TO DASHBOARD</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Add Product Form Section -->
+    <section class="section-padding admin-form-section">
+        <div class="container">
+            <% if ((typeof isOgAdmin !== 'undefined' && isOgAdmin) || (typeof isSubAdmin !== 'undefined' && isSubAdmin)) { %>
+                <div class="form-container-card">
+                    <form action="/admin/add-product" method="POST" enctype="multipart/form-data" class="admin-product-form" id="addProductForm">
+                        
+                        <!-- 1. Basic Product Info -->
+                        <div class="form-section-block">
+                            <h3 class="block-title">1. BASIC CREATION DETAILS</h3>
+                            <div class="form-grid">
+                                <div class="form-group full-width">
+                                    <label for="name" class="form-label">Garment Name *</label>
+                                    <input type="text" id="name" name="name" class="form-control" placeholder="e.g. Double-Breasted Cashmere Trench Coat" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="category" class="form-label">Category *</label>
+                                    <select id="category" name="category" class="form-control" required>
+                                        <option value="" disabled selected>Select Category</option>
+                                        <option value="men">Men</option>
+                                        <option value="women">Women</option>
+                                        <option value="kids">Kids</option>
+                                        <option value="footwear">Footwear</option>
+                                        <option value="accessories">Accessories</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="price" class="form-label">Price (USD $) *</label>
+                                    <input type="number" id="price" name="price" step="0.01" min="0" class="form-control" placeholder="1250.00" required>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- 2. Product description -->
+                        <div class="form-section-block">
+                            <h3 class="block-title">2. PRODUCT DESCRIPTION</h3>
+                            <div class="form-grid">
+                                <div class="form-group full-width">
+                                    <label for="description" class="form-label">Description & Editorial Story *</label>
+                                    <textarea id="description" name="description" rows="4" class="form-control" placeholder="Describe the silhouette, drape, and inspiration behind this creation..." required></textarea>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- 3. Media & Cloudinary Upload -->
+                        <div class="form-section-block">
+                            <h3 class="block-title">3. PRIMARY PRODUCT IMAGE</h3>
+                            <div class="form-group full-width">
+                                <label for="images" class="form-label">Upload High-Res Product Image *</label>
+                                <input type="file" id="images" name="images" class="file-input-control" accept="image/jpeg,image/png,image/webp" required>
+                                <p class="file-help-text">Supported formats: JPG, PNG, WEBP.</p>
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="form-submit-row">
+                            <button type="submit" class="btn btn-gold btn-large">
+                                <i class="ri-upload-cloud-line"></i> PUBLISH TO CATALOGUE
+                            </button>
+                            <a href="/admin" class="btn btn-outline">CANCEL</a>
+                        </div>
+                    </form>
+                </div>
+            <% } else { %>
+                <div class="access-denied-box center">
+                    <h2>Access Restricted</h2>
+                    <p>Only the designated house administrator can add products.</p>
+                    <a href="/" class="btn btn-primary">RETURN TO HOMEPAGE</a>
+                </div>
+            <% } %>
+        </div>
+    </section>
+</main>
+
+<%- include('layouts/footer') %>
+<%- include('layouts/scripts') %>
+

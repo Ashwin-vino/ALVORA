@@ -1,0 +1,124 @@
+<%- include('layouts/header') %>
+<%- include('layouts/navbar') %>
+
+<main class="category-page-wrapper">
+    <!-- Kids Collection Hero Banner -->
+    <section class="category-hero kids-hero">
+        <div class="category-hero-bg">
+            <img src="https://images.unsplash.com/photo-1519238263530-99bdd11df2ea?q=80&w=2070&auto=format&fit=crop" alt="ALVORA Kids Collection">
+            <div class="hero-overlay"></div>
+        </div>
+        <div class="category-hero-content center">
+            <span class="editorial-subheading">ALVORA JUNIOR</span>
+            <h1 class="category-title">The Kids Collection</h1>
+            <p class="category-tagline">Hypoallergenic organic cotton, plush cashmere knits, and heirloom-quality tailoring for young connoisseurs.</p>
+        </div>
+    </section>
+
+    <!-- Sub-Category Navigation Bar -->
+    <div class="category-nav-bar">
+        <div class="container">
+            <ul class="subnav-list">
+                <li><a href="/products/category/kids" class="subnav-link active">ALL JUNIOR</a></li>
+                <li><a href="/products?category=kids&subcategory=knitwear" class="subnav-link">Organic Knitwear</a></li>
+                <li><a href="/products?category=kids&subcategory=ceremonial" class="subnav-link">Ceremonial & Suits</a></li>
+                <li><a href="/products?category=kids&subcategory=outerwear" class="subnav-link">Coats & Jackets</a></li>
+                <li><a href="/products?category=kids&subcategory=essentials" class="subnav-link">Everyday Essentials</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Kids Product Display Section -->
+    <section class="section-padding category-products-section">
+        <div class="container">
+            <!-- Filter & Sort Bar -->
+            <div class="category-toolbar">
+                <div class="toolbar-info">
+                    <span class="product-count">
+                        Showing <strong><%= typeof products !== 'undefined' ? products.length : 0 %></strong> Junior Creations
+                    </span>
+                </div>
+                <div class="toolbar-actions">
+                    <form action="/products/category/kids" method="GET" class="sort-form">
+                        <select name="sort" class="sort-select" onchange="this.form.submit()">
+                            <option value="newest" <%= typeof currentSort !== 'undefined' && currentSort === 'newest' ? 'selected' : '' %>>Newest Arrivals</option>
+                            <option value="price-asc" <%= typeof currentSort !== 'undefined' && currentSort === 'price-asc' ? 'selected' : '' %>>Price: Low to High</option>
+                            <option value="price-desc" <%= typeof currentSort !== 'undefined' && currentSort === 'price-desc' ? 'selected' : '' %>>Price: High to Low</option>
+                        </select>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Product Grid -->
+            <div class="product-grid">
+                <% if (typeof products !== 'undefined' && products && products.length > 0) { %>
+                    <% products.forEach(product => { %>
+                        <div class="product-card" data-id="<%= product._id %>">
+                            <div class="card-image-wrapper">
+                                <a href="/products/<%= product.slug || product._id %>">
+                                    <img src="<%= product.images && product.images.length > 0 ? product.images[0] : '/images/placeholder.jpg' %>" alt="<%= product.name %>" class="primary-image">
+                                    <% if (product.images && product.images.length > 1) { %>
+                                        <img src="<%= product.images[1] %>" alt="<%= product.name %>" class="secondary-image">
+                                    <% } %>
+                                </a>
+
+                                <!-- Wishlist Heart Toggle -->
+                                <button type="button" class="wishlist-heart-btn" data-product-id="<%= product._id %>" aria-label="Add to Wishlist">
+                                    <i class="ri-heart-line"></i>
+                                </button>
+
+                                <div class="quick-add-overlay">
+                                    <a href="/products/<%= product.slug || product._id %>" class="btn-quick-view">VIEW DETAILS</a>
+                                </div>
+                            </div>
+
+                            <div class="card-details">
+                                <span class="card-brand"><%= product.brand || 'ALVORA Junior' %></span>
+                                <h3 class="card-name"><a href="/products/<%= product.slug || product._id %>"><%= product.name %></a></h3>
+                                <div class="card-price">
+                                    $<%= product.price ? product.price.toLocaleString('en-US', { minimumFractionDigits: 2 }) : '0.00' %>
+                                </div>
+
+                                <% if (product.sizes && product.sizes.length > 0) { %>
+                                    <div class="card-sizes">
+                                        <% product.sizes.forEach(size => { %>
+                                            <span class="size-pill"><%= size %></span>
+                                        <% }); %>
+                                    </div>
+                                <% } %>
+                            </div>
+                        </div>
+                    <% }); %>
+                <% } else { %>
+                    <div class="no-products-found center">
+                        <i class="ri-shirt-line empty-icon"></i>
+                        <h2>ALVORA Junior Arriving Soon</h2>
+                        <p>Our children's line featuring GOTS-certified cashmere and fine cotton is coming soon.</p>
+                        <a href="/products" class="btn btn-primary">EXPLORE ALL COLLECTIONS</a>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+    </section>
+
+    <!-- Kids Editorial Feature Banner -->
+    <section class="category-editorial-banner">
+        <div class="container">
+            <div class="editorial-box">
+                <div class="editorial-image">
+                    <img src="https://images.unsplash.com/photo-1503919545889-aef636e10ad4?q=80&w=1287&auto=format&fit=crop" alt="ALVORA Junior Comfort">
+                </div>
+                <div class="editorial-info">
+                    <span class="editorial-tag">ORGANIC PURITY</span>
+                    <h2>Heirloom Softness</h2>
+                    <p>Woven with double-combed long-staple organic cotton and cashmere blends to protect delicate skin without diminishing high-fashion standards.</p>
+                    <a href="/products?category=kids" class="btn btn-outline">DISCOVER JUNIOR LINE</a>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<%- include('layouts/footer') %>
+<%- include('layouts/scripts') %>
+

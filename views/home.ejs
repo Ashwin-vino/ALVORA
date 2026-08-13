@@ -1,0 +1,243 @@
+<%- include('layouts/header') %>
+<%- include('layouts/navbar') %>
+
+<main class="home-page-wrapper">
+    <!-- 1. Luxury Hero Section -->
+    <section class="hero-section">
+        <div class="hero-bg-container">
+            <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=2070&auto=format&fit=crop" alt="ALVORA Autumn Winter Campaign" class="hero-bg-image">
+            <div class="hero-overlay"></div>
+        </div>
+        <div class="hero-content">
+            <span class="hero-subtitle">AUTUMN / WINTER COLLECTION</span>
+            <h1 class="hero-title">Architectural Elegance.<br>Uncompromising Craft.</h1>
+            <p class="hero-description">Discover timeless silhouettes tailored from pure cashmere, vicuña, and fine double-faced wool.</p>
+            <div class="hero-cta-group">
+                <a href="/products" class="btn btn-primary">EXPLORE COLLECTION</a>
+                <a href="/products/category/men" class="btn btn-outline-light">MEN's EDIT</a>
+                <a href="/products/category/women" class="btn btn-outline-light">WOMEN'S EDIT</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. Featured Collection Section -->
+    <section class="section-padding featured-collection-section">
+        <div class="container">
+            <div class="section-header center">
+                <span class="section-subtitle">THE HOUSE SELECTION</span>
+                <h2 class="section-title">Featured Creations</h2>
+                <div class="title-underline"></div>
+            </div>
+
+            <div class="product-grid">
+                <% if (typeof featuredProducts !== 'undefined' && featuredProducts && featuredProducts.length > 0) { %>
+                    <% featuredProducts.forEach(product => { %>
+                        <div class="product-card" data-id="<%= product._id %>">
+                            <div class="card-image-wrapper">
+                                <a href="/products/<%= product.slug || product._id %>">
+                                    <img src="<%= product.images && product.images.length > 0 ? product.images[0] : '/images/placeholder.jpg' %>" alt="<%= product.name %>" class="primary-image" loading="lazy" decoding="async">
+                                    <% if (product.images && product.images.length > 1) { %>
+                                        <img src="<%= product.images[1] %>" alt="<%= product.name %> hover" class="secondary-image" loading="lazy" decoding="async">
+                                    <% } %>
+                                </a>
+                                
+                                <!-- Wishlist Quick Toggle -->
+                                <button type="button" class="wishlist-heart-btn" data-product-id="<%= product._id %>" aria-label="Add to Wishlist">
+                                    <i class="ri-heart-line"></i>
+                                </button>
+
+                                <div class="quick-add-overlay">
+                                    <a href="/products/<%= product.slug || product._id %>" class="btn-quick-view">VIEW DETAILS</a>
+                                </div>
+                            </div>
+
+                            <div class="card-details">
+                                <span class="card-brand"><%= product.brand || 'ALVORA' %></span>
+                                <h3 class="card-name"><a href="/products/<%= product.slug || product._id %>"><%= product.name %></a></h3>
+                                <div class="card-price">$<%= product.price ? product.price.toLocaleString('en-US', { minimumFractionDigits: 2 }) : '0.00' %></div>
+                                
+                                <% if (product.sizes && product.sizes.length > 0) { %>
+                                    <div class="card-sizes">
+                                        <% product.sizes.forEach(size => { %>
+                                            <span class="size-pill"><%= size %></span>
+                                        <% }); %>
+                                    </div>
+                                <% } %>
+                            </div>
+                        </div>
+                    <% }); %>
+                <% } else { %>
+                    <!-- Fallback Luxury Demo Cards if DB is Empty -->
+                    <div class="empty-state-card">
+                        <p>Discovering signature creations...</p>
+                        <a href="/products" class="btn btn-outline">BROWSE ALL COLLECTIONS</a>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. Editorial Banner Section -->
+    <section class="editorial-banner-section">
+        <div class="editorial-container">
+            <div class="editorial-image-col">
+                <img src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?q=80&w=1287&auto=format&fit=crop" alt="ALVORA Tailoring Masterclass">
+            </div>
+            <div class="editorial-text-col">
+                <span class="editorial-tag">CRAFT & HERITAGE</span>
+                <h2 class="editorial-title">The Essence of Quiet Luxury</h2>
+                <p class="editorial-body">
+                    Every garment in our atelier is meticulously cut and finished by master artisans. We source strictly certified organic cashmere, mulberry silk, and raw linens to preserve natural textures and timeless drape.
+                </p>
+                <a href="/about" class="editorial-link">OUR CRAFTSMANSHIP MANIFESTO &rarr;</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. New Arrivals Section -->
+    <section class="section-padding new-arrivals-section">
+        <div class="container">
+            <div class="section-header">
+                <div>
+                    <span class="section-subtitle">NEW ARRIVALS</span>
+                    <h2 class="section-title">The Latest Arrivals</h2>
+                </div>
+                <a href="/products?category=new" class="view-all-link">VIEW ALL NEW ARRIVALS &rarr;</a>
+            </div>
+
+            <div class="product-grid">
+                <% if (typeof newArrivals !== 'undefined' && newArrivals && newArrivals.length > 0) { %>
+                    <% newArrivals.forEach(product => { %>
+                        <div class="product-card">
+                            <div class="card-image-wrapper">
+                                <a href="/products/<%= product.slug || product._id %>">
+                                    <img src="<%= product.images && product.images.length > 0 ? product.images[0] : '/images/placeholder.jpg' %>" alt="<%= product.name %>" loading="lazy" decoding="async">
+                                </a>
+                                <button type="button" class="wishlist-heart-btn" data-product-id="<%= product._id %>">
+                                    <i class="ri-heart-line"></i>
+                                </button>
+                                <span class="badge-new">NEW</span>
+                            </div>
+                            <div class="card-details">
+                                <span class="card-brand"><%= product.brand || 'ALVORA' %></span>
+                                <h3 class="card-name"><a href="/products/<%= product.slug || product._id %>"><%= product.name %></a></h3>
+                                <div class="card-price">$<%= product.price ? product.price.toLocaleString('en-US', { minimumFractionDigits: 2 }) : '0.00' %></div>
+                            </div>
+                        </div>
+                    <% }); %>
+                <% } %>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. Season Collection Spotlight Section -->
+    <section class="season-spotlight-section">
+        <div class="spotlight-grid">
+            <div class="spotlight-card">
+                <img src="https://images.unsplash.com/photo-1487222477894-8943e31ef7b2?q=80&w=1000&auto=format&fit=crop" alt="The Tailored Wardrobe">
+                <div class="spotlight-content">
+                    <span class="spotlight-subtitle">MEN'S SELECTION</span>
+                    <h3>The Modern Tailored Wardrobe</h3>
+                    <a href="/products/category/men" class="btn btn-underline">DISCOVER MEN &rarr;</a>
+                </div>
+            </div>
+            <div class="spotlight-card">
+                <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1000&auto=format&fit=crop" alt="The Evening Capsule">
+                <div class="spotlight-content">
+                    <span class="spotlight-subtitle">WOMEN'S SELECTION</span>
+                    <h3>The Silk & Cashmere Capsule</h3>
+                    <a href="/products/category/women" class="btn btn-underline">DISCOVER WOMEN &rarr;</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. Best Sellers Section -->
+    <% if (typeof bestSellers !== 'undefined' && bestSellers && bestSellers.length > 0) { %>
+    <section class="section-padding best-sellers-section">
+        <div class="container">
+            <div class="section-header center">
+                <span class="section-subtitle">ICONIC PIECES</span>
+                <h2 class="section-title">Best Sellers</h2>
+                <div class="title-underline"></div>
+            </div>
+            <div class="product-grid">
+                <% bestSellers.forEach(product => { %>
+                    <div class="product-card">
+                        <div class="card-image-wrapper">
+                            <a href="/products/<%= product.slug || product._id %>">
+                                <img src="<%= product.images && product.images.length > 0 ? product.images[0] : '/images/placeholder.jpg' %>" alt="<%= product.name %>">
+                            </a>
+                            <button type="button" class="wishlist-heart-btn" data-product-id="<%= product._id %>">
+                                <i class="ri-heart-line"></i>
+                            </button>
+                        </div>
+                        <div class="card-details">
+                            <span class="card-brand"><%= product.brand || 'ALVORA' %></span>
+                            <h3 class="card-name"><a href="/products/<%= product.slug || product._id %>"><%= product.name %></a></h3>
+                            <div class="card-price">$<%= product.price ? product.price.toLocaleString('en-US', { minimumFractionDigits: 2 }) : '0.00' %></div>
+                        </div>
+                    </div>
+                <% }); %>
+            </div>
+        </div>
+    </section>
+    <% } %>
+
+    <!-- 7. Press & Reviews Section -->
+    <section class="reviews-section">
+        <div class="container">
+            <div class="section-header center">
+                <span class="section-subtitle">EDITORIAL ACCLAIM</span>
+                <h2 class="section-title">Critical Praise</h2>
+            </div>
+            <div class="reviews-grid">
+                <div class="review-card">
+                    <div class="quote-icon">“</div>
+                    <p class="review-text">ALVORA redefine modern sartorial luxury. Their cashmere coats exhibit flawless balance between form and comfort.</p>
+                    <span class="review-source">VOGUE INTERNATIONAL</span>
+                </div>
+                <div class="review-card">
+                    <div class="quote-icon">“</div>
+                    <p class="review-text">Quiet luxury at its absolute finest. Understated elegance with uncompromising Italian and British fabric selections.</p>
+                    <span class="review-source">GQ STYLE EDIT</span>
+                </div>
+                <div class="review-card">
+                    <div class="quote-icon">“</div>
+                    <p class="review-text">An essential wardrobe investment. Every piece feels like an heirloom designed to transcend fleeting trends.</p>
+                    <span class="review-source">HARPER'S BAZAAR</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 8. Instagram Gallery Section -->
+    <section class="instagram-section">
+        <div class="instagram-header center">
+            <span class="section-subtitle">@ALVORA.OFFICIAL</span>
+            <h2 class="section-title">Follow The House</h2>
+        </div>
+        <div class="instagram-grid">
+            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="insta-item">
+                <img src="https://images.unsplash.com/photo-1509631179647-0177331693ae?q=80&w=600&auto=format&fit=crop" alt="ALVORA Instagram 1">
+                <div class="insta-overlay"><i class="ri-instagram-line"></i></div>
+            </a>
+            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="insta-item">
+                <img src="https://images.unsplash.com/photo-1485230895905-ec40ba36b9bc?q=80&w=600&auto=format&fit=crop" alt="ALVORA Instagram 2">
+                <div class="insta-overlay"><i class="ri-instagram-line"></i></div>
+            </a>
+            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="insta-item">
+                <img src="https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?q=80&w=600&auto=format&fit=crop" alt="ALVORA Instagram 3">
+                <div class="insta-overlay"><i class="ri-instagram-line"></i></div>
+            </a>
+            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="insta-item">
+                <img src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?q=80&w=600&auto=format&fit=crop" alt="ALVORA Instagram 4">
+                <div class="insta-overlay"><i class="ri-instagram-line"></i></div>
+            </a>
+        </div>
+    </section>
+</main>
+
+<%- include('layouts/footer') %>
+<%- include('layouts/scripts') %>
+

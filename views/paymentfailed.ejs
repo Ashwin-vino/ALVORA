@@ -1,0 +1,45 @@
+<%- include('layouts/header') %>
+<%- include('layouts/navbar') %>
+
+<main class="payment-failed-page-wrapper">
+    <section class="section-padding payment-status-section">
+        <div class="container center">
+            <div class="payment-status-card error-card">
+                <!-- Warning / Alert Icon -->
+                <div class="status-icon-wrapper error-icon">
+                    <i class="ri-error-warning-line"></i>
+                </div>
+
+                <span class="editorial-subheading text-danger">SERVER ERROR</span>
+                <h1 class="status-title">Payment Failed</h1>
+                
+                <div class="status-message-box">
+                    <p class="status-main-text">Please Try Again Later.</p>
+                    <p class="status-sub-text">
+                        An unexpected processing error occurred while attempting to secure your transaction with the banking provider. Your card or account has not been charged for this attempt.
+                    </p>
+                </div>
+
+                <div class="status-divider"></div>
+
+                <!-- Action Buttons -->
+                <div class="status-actions-group">
+                    <a href="/cart" class="btn btn-primary">
+                        <i class="ri-arrow-left-line"></i> RETURN TO SHOPPING BAG
+                    </a>
+                    <a href="/" class="btn btn-outline">
+                        RETURN TO HOMEPAGE
+                    </a>
+                </div>
+
+                <div class="status-help-footer">
+                    <p>If you require assistance with your order, please contact ALVORA Concierge at <a href="mailto:concierge@alvora.com">concierge@alvora.com</a>.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<%- include('layouts/footer') %>
+<%- include('layouts/scripts') %>
+

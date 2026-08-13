@@ -1,0 +1,36 @@
+<%- include('layouts/header') %>
+<%- include('layouts/navbar') %>
+
+<main class="static-page-wrapper section-padding">
+  <div class="container compact-page-content">
+    <div class="page-header-block center">
+      <span class="editorial-subheading">ALVORA HOUSE</span>
+      <h1 class="page-title"><%= title %></h1>
+      <div class="title-underline"></div>
+    </div>
+
+    <article class="static-page-body">
+      <p class="lead-text">
+        <%= description %>
+      </p>
+
+      <div class="static-page-copy">
+        <p>
+          ALVORA Maison is built around considered wardrobe essentials, contemporary craft, and a refined shopping experience for clients who value clarity, integrity, and beautiful materials.
+        </p>
+        <p>
+          For service-related inquiries or order support, use the secure ALVORA client services experience and continue through the purchase journey from the collection dashboards.
+        </p>
+      </div>
+
+      <div class="page-action-row margin-top-lg">
+        <a href="/products" class="btn btn-primary">DISCOVER COLLECTIONS</a>
+        <a href="/" class="btn btn-outline">RETURN TO HOME</a>
+      </div>
+    </article>
+  </div>
+</main>
+
+<%- include('layouts/footer') %>
+<%- include('layouts/scripts') %>
+

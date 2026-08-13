@@ -1,0 +1,125 @@
+<%- include('layouts/header') %>
+<%- include('layouts/navbar') %>
+
+<main class="category-page-wrapper">
+    <!-- Women's Collection Hero Banner -->
+    <section class="category-hero women-hero">
+        <div class="category-hero-bg">
+            <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=2070&auto=format&fit=crop" alt="ALVORA Women Collection">
+            <div class="hero-overlay"></div>
+        </div>
+        <div class="category-hero-content center">
+            <span class="editorial-subheading">FLUID ELEGANCE</span>
+            <h1 class="category-title">The Women's Collection</h1>
+            <p class="category-tagline">Graceful drapes, pure mulberry silk, and quiet luxury knits tailored for effortlessly sophisticated wardrobing.</p>
+        </div>
+    </section>
+
+    <!-- Sub-Category Navigation Bar -->
+    <div class="category-nav-bar">
+        <div class="container">
+            <ul class="subnav-list">
+                <li><a href="/products/category/women" class="subnav-link active">ALL WOMEN</a></li>
+                <li><a href="/products?category=women&subcategory=dresses" class="subnav-link">Silk & Evening Dresses</a></li>
+                <li><a href="/products?category=women&subcategory=knitwear" class="subnav-link">Cashmere & Fine Knits</a></li>
+                <li><a href="/products?category=women&subcategory=outerwear" class="subnav-link">Tailored Coats & Trench</a></li>
+                <li><a href="/products?category=women&subcategory=blouses" class="subnav-link">Blouses & Shirts</a></li>
+                <li><a href="/products?category=women&subcategory=skirts-trousers" class="subnav-link">Trousers & Skirts</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Women's Product Display Section -->
+    <section class="section-padding category-products-section">
+        <div class="container">
+            <!-- Filter & Sort Bar -->
+            <div class="category-toolbar">
+                <div class="toolbar-info">
+                    <span class="product-count">
+                        Showing <strong><%= typeof products !== 'undefined' ? products.length : 0 %></strong> Women's Creations
+                    </span>
+                </div>
+                <div class="toolbar-actions">
+                    <form action="/products/category/women" method="GET" class="sort-form">
+                        <select name="sort" class="sort-select" onchange="this.form.submit()">
+                            <option value="newest" <%= typeof currentSort !== 'undefined' && currentSort === 'newest' ? 'selected' : '' %>>Newest Arrivals</option>
+                            <option value="price-asc" <%= typeof currentSort !== 'undefined' && currentSort === 'price-asc' ? 'selected' : '' %>>Price: Low to High</option>
+                            <option value="price-desc" <%= typeof currentSort !== 'undefined' && currentSort === 'price-desc' ? 'selected' : '' %>>Price: High to Low</option>
+                        </select>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Product Grid -->
+            <div class="product-grid">
+                <% if (typeof products !== 'undefined' && products && products.length > 0) { %>
+                    <% products.forEach(product => { %>
+                        <div class="product-card" data-id="<%= product._id %>">
+                            <div class="card-image-wrapper">
+                                <a href="/products/<%= product.slug || product._id %>">
+                                    <img src="<%= product.images && product.images.length > 0 ? product.images[0] : '/images/placeholder.jpg' %>" alt="<%= product.name %>" class="primary-image">
+                                    <% if (product.images && product.images.length > 1) { %>
+                                        <img src="<%= product.images[1] %>" alt="<%= product.name %>" class="secondary-image">
+                                    <% } %>
+                                </a>
+
+                                <!-- Wishlist Heart Toggle -->
+                                <button type="button" class="wishlist-heart-btn" data-product-id="<%= product._id %>" aria-label="Add to Wishlist">
+                                    <i class="ri-heart-line"></i>
+                                </button>
+
+                                <div class="quick-add-overlay">
+                                    <a href="/products/<%= product.slug || product._id %>" class="btn-quick-view">VIEW DETAILS</a>
+                                </div>
+                            </div>
+
+                            <div class="card-details">
+                                <span class="card-brand"><%= product.brand || 'ALVORA' %></span>
+                                <h3 class="card-name"><a href="/products/<%= product.slug || product._id %>"><%= product.name %></a></h3>
+                                <div class="card-price">
+                                    $<%= product.price ? product.price.toLocaleString('en-US', { minimumFractionDigits: 2 }) : '0.00' %>
+                                </div>
+
+                                <% if (product.sizes && product.sizes.length > 0) { %>
+                                    <div class="card-sizes">
+                                        <% product.sizes.forEach(size => { %>
+                                            <span class="size-pill"><%= size %></span>
+                                        <% }); %>
+                                    </div>
+                                <% } %>
+                            </div>
+                        </div>
+                    <% }); %>
+                <% } else { %>
+                    <div class="no-products-found center">
+                        <i class="ri-shirt-line empty-icon"></i>
+                        <h2>Women's Collection Coming Soon</h2>
+                        <p>Our atelier is finishing the latest womenswear seasonal releases.</p>
+                        <a href="/products" class="btn btn-primary">EXPLORE ALL COLLECTIONS</a>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+    </section>
+
+    <!-- Women's Editorial Feature Banner -->
+    <section class="category-editorial-banner">
+        <div class="container">
+            <div class="editorial-box reverse">
+                <div class="editorial-image">
+                    <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1000&auto=format&fit=crop" alt="Women's Silk Collection">
+                </div>
+                <div class="editorial-info">
+                    <span class="editorial-tag">SILK & CASHMERE</span>
+                    <h2>Sensorial Minimalist Wardrobing</h2>
+                    <p>Featherlight Mongolian cashmere and double-faced Mulberry silk designed for seamless transitions between day tailoring and evening elegance.</p>
+                    <a href="/products?category=women&subcategory=dresses" class="btn btn-outline">EXPLORE DRESSES</a>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<%- include('layouts/footer') %>
+<%- include('layouts/scripts') %>
+

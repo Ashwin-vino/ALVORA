@@ -1,0 +1,132 @@
+<%- include('layouts/header') %>
+<%- include('layouts/navbar') %>
+
+<main class="profile-page-wrapper">
+    <!-- Header Banner -->
+    <section class="profile-header-section">
+        <div class="container">
+            <div class="profile-header-content center">
+                <span class="editorial-subheading">CLIENT ACCOUNT</span>
+                <h1 class="profile-title">Client Profile</h1>
+                <p class="profile-description">Manage your personal details, order tracking, saved wishlist, and privileges.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Profile Content Section -->
+    <section class="section-padding profile-body-section">
+        <div class="container">
+            <% if (typeof user !== 'undefined' && user) { %>
+                <div class="profile-layout-grid">
+                    <!-- Left Column: User Card -->
+                    <aside class="profile-card-sidebar">
+                        <div class="profile-card">
+                            <div class="profile-avatar-wrapper">
+                                <% if (user.avatar) { %>
+                                    <img src="<%= user.avatar %>" alt="<%= user.name %>" class="profile-avatar-img">
+                                <% } else { %>
+                                    <div class="avatar-placeholder">
+                                        <%= user.name ? user.name.charAt(0).toUpperCase() : 'A' %>
+                                    </div>
+                                <% } %>
+                            </div>
+
+                            <h2 class="profile-user-name"><%= user.name %></h2>
+                            <p class="profile-user-email"><%= user.email %></p>
+
+                            <% if (typeof isOgAdmin !== 'undefined' && isOgAdmin) { %>
+                                <span class="role-badge admin-role"><i class="ri-shield-star-line"></i> MASTER ADMINISTRATOR</span>
+                            <% } else if (typeof isSubAdmin !== 'undefined' && isSubAdmin) { %>
+                                <span class="role-badge client-role">SUB-ADMIN (CLIENT)</span>
+                            <% } else { %>
+                                <span class="role-badge client-role">PRIVILEGED CLIENT</span>
+                            <% } %>
+
+                            <div class="profile-card-divider"></div>
+
+                            <a href="/auth/logout" class="btn btn-outline btn-block btn-logout">
+                                <i class="ri-logout-box-r-line"></i> SIGN OUT
+                            </a>
+                        </div>
+                    </aside>
+
+                    <!-- Right Column: Quick Links & Summary -->
+                    <div class="profile-main-content">
+                        <div class="profile-nav-tiles">
+                            <!-- Orders Tile -->
+                            <a href="/orders" class="profile-tile">
+                                <div class="tile-icon"><i class="ri-shopping-bag-3-line"></i></div>
+                                <div class="tile-details">
+                                    <h3>Order History</h3>
+                                    <p>Track current shipments, past purchases, and invoices.</p>
+                                </div>
+                                <i class="ri-arrow-right-line tile-arrow"></i>
+                            </a>
+
+                            <!-- Wishlist Tile -->
+                            <a href="/wishlist" class="profile-tile">
+                                <div class="tile-icon"><i class="ri-heart-3-line"></i></div>
+                                <div class="tile-details">
+                                    <h3>Saved Wishlist</h3>
+                                    <p>View saved garments and items reserved for later purchase.</p>
+                                </div>
+                                <i class="ri-arrow-right-line tile-arrow"></i>
+                            </a>
+
+                            <!-- Shopping Cart Tile -->
+                            <a href="/cart" class="profile-tile">
+                                <div class="tile-icon"><i class="ri-shopping-cart-2-line"></i></div>
+                                <div class="tile-details">
+                                    <h3>Shopping Bag</h3>
+                                    <p>Review items in your active cart ready for express checkout.</p>
+                                </div>
+                                <i class="ri-arrow-right-line tile-arrow"></i>
+                            </a>
+
+                            <!-- Admin Panel Tile (Only if user is Admin in Admin Mode or OG Admin) -->
+                            <% if ((typeof isOgAdmin !== 'undefined' && isOgAdmin) || (typeof isSubAdmin !== 'undefined' && isSubAdmin && typeof isAdminMode !== 'undefined' && isAdminMode)) { %>
+                                <a href="/admin" class="profile-tile admin-tile">
+                                    <div class="tile-icon"><i class="ri-admin-line"></i></div>
+                                    <div class="tile-details">
+                                        <h3>Admin Management Dashboard</h3>
+                                        <p>Manage product catalog, inventory, order statuses, and images.</p>
+                                    </div>
+                                    <i class="ri-arrow-right-line tile-arrow"></i>
+                                </a>
+                            <% } %>
+                        </div>
+
+                        <!-- Account Summary Box -->
+                        <div class="account-details-box">
+                            <h3 class="box-title">ACCOUNT PREFERENCES</h3>
+                            <div class="details-row">
+                                <span class="detail-label">Authentication Method:</span>
+                                <span class="detail-value"><i class="ri-google-fill"></i> Google OAuth 2.0</span>
+                            </div>
+                            <div class="details-row">
+                                <span class="detail-label">Member Since:</span>
+                                <span class="detail-value">
+                                    <%= user.createdAt ? new Date(user.createdAt).toLocaleDateString('en-US', { month: 'long', year: 'numeric' }) : '2026' %>
+                                </span>
+                            </div>
+                            <div class="details-row">
+                                <span class="detail-label">Express Delivery Privilege:</span>
+                                <span class="detail-value text-success">Active Worldwide</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <% } else { %>
+                <!-- Not Logged In Fallback -->
+                <div class="center section-padding">
+                    <h2>Please Sign In</h2>
+                    <p>You must be authenticated via Google to access client profile details.</p>
+                    <a href="/auth/google" class="btn btn-primary margin-top-lg">SIGN IN WITH GOOGLE</a>
+                </div>
+            <% } %>
+        </div>
+    </section>
+</main>
+
+<%- include('layouts/footer') %>
+<%- include('layouts/scripts') %>

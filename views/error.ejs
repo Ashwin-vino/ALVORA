@@ -1,0 +1,49 @@
+<%- include('layouts/header') %>
+<%- include('layouts/navbar') %>
+
+<main class="error-page-wrapper">
+    <section class="section-padding error-section">
+        <div class="container center">
+            <div class="error-card-container">
+                <!-- Error Icon -->
+                <div class="error-icon-box">
+                    <i class="ri-error-warning-line"></i>
+                </div>
+
+                <span class="editorial-subheading text-danger">ATELIER EXCEPTION</span>
+                <h1 class="error-title"><%= typeof message !== 'undefined' ? message : 'An Unexpected Error Occurred' %></h1>
+                
+                <div class="error-status-badge">
+                    <span>Status Code: <%= typeof error !== 'undefined' && error.status ? error.status : 500 %></span>
+                </div>
+
+                <p class="error-description">
+                    We apologize for the inconvenience. Our technical system encountered an issue processing your request.
+                </p>
+
+                <!-- Stack trace for debugging in non-production environments -->
+                <% if (typeof error !== 'undefined' && error.stack && process.env.NODE_ENV !== 'production') { %>
+                    <div class="error-stack-wrapper">
+                        <pre class="error-stack-trace"><code><%= error.stack %></code></pre>
+                    </div>
+                <% } %>
+
+                <div class="error-divider"></div>
+
+                <!-- Navigation Actions -->
+                <div class="error-actions-group">
+                    <a href="/" class="btn btn-primary">
+                        <i class="ri-home-4-line"></i> RETURN TO HOMEPAGE
+                    </a>
+                    <button type="button" onclick="window.history.back()" class="btn btn-outline">
+                        <i class="ri-arrow-left-line"></i> GO BACK
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<%- include('layouts/footer') %>
+<%- include('layouts/scripts') %>
+

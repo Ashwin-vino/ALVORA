@@ -1,0 +1,125 @@
+<%- include('layouts/header') %>
+<%- include('layouts/navbar') %>
+
+<main class="category-page-wrapper">
+    <!-- Footwear Collection Hero Banner -->
+    <section class="category-hero footwear-hero">
+        <div class="category-hero-bg">
+            <img src="https://images.unsplash.com/photo-1549298916-b41d501d3772?q=80&w=2012&auto=format&fit=crop" alt="ALVORA Footwear Collection">
+            <div class="hero-overlay"></div>
+        </div>
+        <div class="category-hero-content center">
+            <span class="editorial-subheading">ARTISANAL SHOEMAKING</span>
+            <h1 class="category-title">The Footwear Atelier</h1>
+            <p class="category-tagline">Goodyear-welted leathers, hand-finished calfskin, and architectural minimal silhouettes crafted in Marche, Italy.</p>
+        </div>
+    </section>
+
+    <!-- Sub-Category Navigation Bar -->
+    <div class="category-nav-bar">
+        <div class="container">
+            <ul class="subnav-list">
+                <li><a href="/products/category/footwear" class="subnav-link active">ALL FOOTWEAR</a></li>
+                <li><a href="/products?category=footwear&subcategory=loafers" class="subnav-link">Leather Loafers</a></li>
+                <li><a href="/products?category=footwear&subcategory=boots" class="subnav-link">Chelsea & Dress Boots</a></li>
+                <li><a href="/products?category=footwear&subcategory=sneakers" class="subnav-link">Minimal Sneakers</a></li>
+                <li><a href="/products?category=footwear&subcategory=oxfords" class="subnav-link">Oxfords & Derbies</a></li>
+                <li><a href="/products?category=footwear&subcategory=heels" class="subnav-link">Heels & Sandals</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Footwear Product Display Section -->
+    <section class="section-padding category-products-section">
+        <div class="container">
+            <!-- Filter & Sort Bar -->
+            <div class="category-toolbar">
+                <div class="toolbar-info">
+                    <span class="product-count">
+                        Showing <strong><%= typeof products !== 'undefined' ? products.length : 0 %></strong> Artisanal Creations
+                    </span>
+                </div>
+                <div class="toolbar-actions">
+                    <form action="/products/category/footwear" method="GET" class="sort-form">
+                        <select name="sort" class="sort-select" onchange="this.form.submit()">
+                            <option value="newest" <%= typeof currentSort !== 'undefined' && currentSort === 'newest' ? 'selected' : '' %>>Newest Arrivals</option>
+                            <option value="price-asc" <%= typeof currentSort !== 'undefined' && currentSort === 'price-asc' ? 'selected' : '' %>>Price: Low to High</option>
+                            <option value="price-desc" <%= typeof currentSort !== 'undefined' && currentSort === 'price-desc' ? 'selected' : '' %>>Price: High to Low</option>
+                        </select>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Product Grid -->
+            <div class="product-grid">
+                <% if (typeof products !== 'undefined' && products && products.length > 0) { %>
+                    <% products.forEach(product => { %>
+                        <div class="product-card" data-id="<%= product._id %>">
+                            <div class="card-image-wrapper">
+                                <a href="/products/<%= product.slug || product._id %>">
+                                    <img src="<%= product.images && product.images.length > 0 ? product.images[0] : '/images/placeholder.jpg' %>" alt="<%= product.name %>" class="primary-image">
+                                    <% if (product.images && product.images.length > 1) { %>
+                                        <img src="<%= product.images[1] %>" alt="<%= product.name %>" class="secondary-image">
+                                    <% } %>
+                                </a>
+
+                                <!-- Wishlist Heart Toggle -->
+                                <button type="button" class="wishlist-heart-btn" data-product-id="<%= product._id %>" aria-label="Add to Wishlist">
+                                    <i class="ri-heart-line"></i>
+                                </button>
+
+                                <div class="quick-add-overlay">
+                                    <a href="/products/<%= product.slug || product._id %>" class="btn-quick-view">VIEW DETAILS</a>
+                                </div>
+                            </div>
+
+                            <div class="card-details">
+                                <span class="card-brand"><%= product.brand || 'ALVORA Atelier' %></span>
+                                <h3 class="card-name"><a href="/products/<%= product.slug || product._id %>"><%= product.name %></a></h3>
+                                <div class="card-price">
+                                    $<%= product.price ? product.price.toLocaleString('en-US', { minimumFractionDigits: 2 }) : '0.00' %>
+                                </div>
+
+                                <% if (product.sizes && product.sizes.length > 0) { %>
+                                    <div class="card-sizes">
+                                        <% product.sizes.forEach(size => { %>
+                                            <span class="size-pill"><%= size %></span>
+                                        <% }); %>
+                                    </div>
+                                <% } %>
+                            </div>
+                        </div>
+                    <% }); %>
+                <% } else { %>
+                    <div class="no-products-found center">
+                        <i class="ri-footprint-line empty-icon"></i>
+                        <h2>Footwear Collection Arriving Soon</h2>
+                        <p>Our Tuscan cobblers are hand-welting the upcoming footwear release.</p>
+                        <a href="/products" class="btn btn-primary">EXPLORE ALL COLLECTIONS</a>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footwear Editorial Feature Banner -->
+    <section class="category-editorial-banner">
+        <div class="container">
+            <div class="editorial-box reverse">
+                <div class="editorial-image">
+                    <img src="https://images.unsplash.com/photo-1533867617858-e7b97e060509?q=80&w=1287&auto=format&fit=crop" alt="Italian Handcrafted Leather">
+                </div>
+                <div class="editorial-info">
+                    <span class="editorial-tag">GOODYEAR WELTED</span>
+                    <h2>Unmatched Ergonomic Mastery</h2>
+                    <p>Hand-selected vegetable-tanned French calfskin conditioned with natural oils and finished with stacked leather soles for enduring elegance.</p>
+                    <a href="/products?category=footwear" class="btn btn-outline">EXPLORE ATELIER SHOES</a>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<%- include('layouts/footer') %>
+<%- include('layouts/scripts') %>
+

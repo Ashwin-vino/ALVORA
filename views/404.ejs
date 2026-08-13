@@ -1,0 +1,47 @@
+<%- include('layouts/header') %>
+<%- include('layouts/navbar') %>
+
+<main class="error-page-wrapper page-404-wrapper">
+    <section class="section-padding error-section">
+        <div class="container center">
+            <div class="error-card-container">
+                <!-- 404 Headline Badge -->
+                <div class="number-404-display">
+                    <span>404</span>
+                </div>
+
+                <span class="editorial-subheading">ARCHIVE NOTICE</span>
+                <h1 class="error-title">Page Not Found</h1>
+                
+                <p class="error-description">
+                    The requested URL or garment page could not be located in the ALVORA archive. It may have been moved, renamed, or retired.
+                </p>
+
+                <div class="error-divider"></div>
+
+                <!-- Navigation Actions -->
+                <div class="error-actions-group">
+                    <a href="/" class="btn btn-primary">
+                        <i class="ri-home-4-line"></i> RETURN TO HOMEPAGE
+                    </a>
+                    <a href="/products" class="btn btn-outline">
+                        <i class="ri-compass-3-line"></i> BROWSE COLLECTIONS
+                    </a>
+                </div>
+
+                <!-- Quick Search Bar -->
+                <div class="quick-404-search">
+                    <form action="/products/search" method="GET" class="search-404-form" aria-label="Search products">
+                        <label for="notFoundSearch" class="sr-only">Search products</label>
+                        <input id="notFoundSearch" type="text" name="q" placeholder="Search products..." required aria-label="Search products">
+                        <button type="submit" aria-label="Search products"><i class="ri-search-line" aria-hidden="true"></i></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<%- include('layouts/footer') %>
+<%- include('layouts/scripts') %>
+

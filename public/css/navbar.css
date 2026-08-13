@@ -1,0 +1,881 @@
+/* ==========================================
+   ALVORA MAISON — LUXURY NAVIGATION SYSTEM
+   Theme: Quiet Luxury Floating Navbar
+   ========================================== */
+
+/* ------------------------------------------
+   1. MAIN HEADER & FLOATING CONTAINER
+   ------------------------------------------ */
+.site-header {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: var(--z-header);
+  background: rgba(250, 248, 245, 0.82);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(234, 227, 210, 0.6);
+  transition: transform var(--transition-normal), background-color var(--transition-normal), box-shadow var(--transition-normal);
+}
+
+.site-header.scrolled {
+  background: rgba(250, 248, 245, 0.94);
+  box-shadow: 0 10px 30px rgba(6, 11, 17, 0.04);
+}
+
+/* Announcement Top Bar */
+.announcement-bar {
+  background-color: var(--text-primary);
+  color: var(--bg-canvas);
+  font-size: 0.725rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.5rem 0;
+  text-align: center;
+  font-weight: 400;
+  overflow: hidden;
+}
+
+.announcement-bar a {
+  color: var(--color-gold-light);
+  text-decoration: underline;
+  margin-left: 0.5rem;
+}
+
+/* ------------------------------------------
+   2. TOP ROW LAYOUT (SEARCH - LOGO - ACTIONS)
+   ------------------------------------------ */
+.navbar-top {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  padding-top: 1.25rem;
+  padding-bottom: 0.75rem;
+}
+
+/* Left Utility Area */
+.navbar-left {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.nav-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  font-size: 1.25rem;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  transition: color var(--transition-fast), background-color var(--transition-fast), transform var(--transition-fast);
+  position: relative;
+}
+
+.nav-icon-btn:hover {
+  color: var(--color-gold);
+  background-color: rgba(192, 158, 88, 0.08);
+  transform: translateY(-1px);
+}
+
+.search-trigger-text {
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: color var(--transition-fast);
+}
+
+.search-trigger-text:hover {
+  color: var(--text-primary);
+}
+
+/* Center Brand Logo */
+.navbar-brand {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+}
+
+.brand-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  text-decoration: none;
+  transition: opacity var(--transition-fast);
+}
+
+.brand-logo:hover {
+  opacity: 0.8;
+}
+
+.alvora-logo {
+  height: clamp(1.4rem, 2.5vw, 1.8rem);
+  width: auto;
+  object-fit: contain;
+  display: block;
+}
+
+.alvora-logotext {
+  font-family: var(--font-heading);
+  font-size: clamp(1.4rem, 2.5vw, 1.8rem);
+  font-weight: 400;
+  letter-spacing: 0.28em;
+  color: var(--text-primary);
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.brand-sublabel {
+  font-size: 0.575rem;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+  margin-top: 0.35rem;
+  font-weight: 500;
+}
+
+/* Right Actions Area */
+.navbar-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.nav-action-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* Icon Badges (Cart & Wishlist Count) */
+.badge-count {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background-color: var(--color-gold);
+  color: #FFFFFF;
+  font-size: 0.65rem;
+  font-weight: 600;
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  box-shadow: 0 2px 6px rgba(192, 158, 88, 0.4);
+}
+
+/* Google Login / Auth Button in Navbar */
+.nav-auth-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.5rem 1.1rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-pill);
+  font-size: 0.775rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  background: var(--bg-card);
+  transition: var(--transition-normal);
+  box-shadow: var(--shadow-subtle);
+}
+
+.nav-auth-btn svg {
+  width: 15px;
+  height: 15px;
+}
+
+.nav-auth-btn:hover {
+  border-color: var(--color-gold);
+  color: var(--color-gold);
+  background-color: #FFFFFF;
+  box-shadow: 0 4px 15px rgba(192, 158, 88, 0.15);
+  transform: translateY(-1px);
+}
+
+.user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--color-gold);
+  object-fit: cover;
+}
+
+/* ------------------------------------------
+   3. BOTTOM NAVIGATION ROW (CATEGORY NAVIGATION)
+   ------------------------------------------ */
+.navbar-bottom {
+  padding-top: 0.25rem;
+  padding-bottom: 0.85rem;
+  border-top: 1px solid rgba(234, 227, 210, 0.3);
+}
+
+.nav-menu {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(1.5rem, 3vw, 3rem);
+  list-style: none;
+}
+
+.nav-item {
+  position: relative;
+}
+
+.nav-link {
+  font-size: 0.825rem;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  padding: 0.5rem 0;
+  display: inline-block;
+  transition: color var(--transition-fast);
+  position: relative;
+}
+
+/* Editorial Gold Underline Hover */
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 1.5px;
+  background-color: var(--color-gold);
+  transition: width var(--transition-normal);
+}
+
+.nav-link:hover,
+.nav-item.active .nav-link {
+  color: var(--color-gold);
+}
+
+.nav-link:hover::after,
+.nav-item.active .nav-link::after {
+  width: 100%;
+}
+
+/* Featured Category Accent */
+.nav-link.highlight {
+  color: var(--color-gold);
+  font-weight: 500;
+}
+
+/* Dropdown Menu Minimal Container */
+.nav-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1.25rem 1.5rem;
+  min-width: 220px;
+  box-shadow: var(--shadow-card);
+  opacity: 0;
+  visibility: hidden;
+  transition: var(--transition-normal);
+  z-index: var(--z-dropdown);
+}
+
+.nav-item:hover .nav-dropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+.dropdown-link {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  padding: 0.4rem 0;
+  letter-spacing: 0.05em;
+  transition: color var(--transition-fast), transform var(--transition-fast);
+}
+
+.dropdown-link:hover {
+  color: var(--color-gold);
+  transform: translateX(4px);
+}
+
+/* ------------------------------------------
+   4. MOBILE NAVIGATION & HAMBURGER DRAWER
+   ------------------------------------------ */
+.mobile-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.25rem;
+}
+
+.mobile-drawer-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(6, 11, 17, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: calc(var(--z-header) + 10);
+  opacity: 0;
+  visibility: hidden;
+  transition: var(--transition-normal);
+}
+
+.mobile-drawer-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.mobile-drawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 85%;
+  max-width: 380px;
+  height: 100vh;
+  background-color: var(--bg-canvas);
+  z-index: calc(var(--z-header) + 20);
+  transform: translateX(-100%);
+  transition: transform var(--transition-normal);
+  display: flex;
+  flex-direction: column;
+  padding: 2rem 1.75rem;
+  box-shadow: var(--shadow-elevated);
+}
+
+.mobile-drawer.active {
+  transform: translateX(0);
+}
+
+.mobile-drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.drawer-close-btn {
+  font-size: 1.5rem;
+  color: var(--text-primary);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.mobile-nav-menu {
+  list-style: none;
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.mobile-nav-link {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  color: var(--text-primary);
+  text-decoration: none;
+  display: block;
+  transition: color var(--transition-fast);
+}
+
+.mobile-nav-link:hover {
+  color: var(--color-gold);
+}
+
+.mobile-drawer-footer {
+  margin-top: auto;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* ------------------------------------------
+   5. RESPONSIVE MEDIA QUERIES
+   ------------------------------------------ */
+@media (max-width: 992px) {
+  .navbar-bottom {
+    display: none;
+    /* Hide bottom nav desktop bar */
+  }
+
+  .mobile-toggle {
+    display: inline-flex;
+  }
+
+  .navbar-top {
+    padding-top: 0.85rem;
+    padding-bottom: 0.85rem;
+  }
+
+  .search-trigger-text span {
+    display: none;
+    /* Hide text on mobile, keep icon */
+  }
+
+  .brand-logo {
+    font-size: 1.6rem;
+    letter-spacing: 0.2em;
+  }
+
+  .brand-sublabel {
+    font-size: 0.5rem;
+    letter-spacing: 0.3em;
+  }
+}
+
+@media (max-width: 576px) {
+  .nav-auth-btn span {
+    display: none;
+    /* Show icon only for compact view */
+  }
+
+  .nav-auth-btn {
+    padding: 0.5rem;
+    border-radius: 50%;
+  }
+}
+
+/* ------------------------------------------
+   6. CURRENT ALVORA TEMPLATE NAVIGATION
+   The shared partial uses these class names. Keep this
+   mapping here so the desktop and mobile navigation use
+   the same visual system as the legacy components above.
+   ------------------------------------------ */
+.navbar-header {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-header);
+  width: 100%;
+  background: rgba(250, 248, 245, 0.92);
+  border-bottom: 1px solid rgba(234, 227, 210, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  transition: transform var(--transition-normal), background-color var(--transition-normal), box-shadow var(--transition-normal);
+}
+
+.navbar-header.navbar-scrolled {
+  background: rgba(250, 248, 245, 0.98);
+  box-shadow: 0 10px 30px rgba(6, 11, 17, 0.05);
+}
+
+.navbar-header.navbar-hidden {
+  transform: translateY(-100%);
+}
+
+.navbar-header .navbar-top {
+  width: min(100%, var(--site-max-width));
+  margin: 0 auto;
+  padding: 1.15rem clamp(1.25rem, 4vw, 3.5rem) 0.8rem;
+}
+
+.nav-left,
+.nav-right {
+  display: flex;
+  align-items: center;
+}
+
+.nav-left {
+  justify-content: flex-start;
+}
+
+.nav-center {
+  display: flex;
+  justify-content: center;
+}
+
+.nav-right {
+  justify-content: flex-end;
+  gap: 0.4rem;
+}
+
+.search-trigger-btn,
+.nav-action-link,
+.mobile-menu-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  min-height: 40px;
+  color: var(--text-primary);
+  border: 0;
+  background: transparent;
+  font-size: 1.15rem;
+  transition: color var(--transition-fast), background-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.search-trigger-btn {
+  gap: 0.45rem;
+  padding: 0.25rem 0.35rem;
+}
+
+.search-label,
+.nav-label {
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.search-trigger-btn:hover,
+.nav-action-link:hover,
+.mobile-menu-btn:hover {
+  color: var(--color-gold);
+  transform: translateY(-1px);
+}
+
+.nav-action-link {
+  gap: 0.3rem;
+  padding: 0.25rem 0.35rem;
+}
+
+.nav-action-link .badge-count {
+  top: 0;
+  right: 0;
+}
+
+.user-avatar-img {
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--color-gold);
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.admin-badge {
+  color: var(--color-gold);
+}
+
+.navbar-header .navbar-bottom {
+  padding: 0.3rem clamp(1.25rem, 4vw, 3.5rem) 0.8rem;
+}
+
+.nav-links {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: clamp(1.25rem, 3vw, 3rem);
+  margin: 0 auto;
+}
+
+.nav-link.active,
+.nav-link.active::after {
+  color: var(--color-gold);
+  width: 100%;
+}
+
+.mobile-menu-btn {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  width: 40px;
+  padding: 0.25rem;
+}
+
+.hamburger-line {
+  display: block;
+  width: 19px;
+  height: 1px;
+  background: currentColor;
+  transition: transform var(--transition-fast), opacity var(--transition-fast);
+}
+
+.mobile-menu-btn.is-active .hamburger-line:first-child {
+  transform: translateY(3px) rotate(45deg);
+}
+
+.mobile-menu-btn.is-active .hamburger-line:last-child {
+  transform: translateY(-3px) rotate(-45deg);
+}
+
+/* Overlays must be removed from normal flow until JavaScript opens them. */
+.search-overlay,
+.mobile-nav-overlay {
+  position: fixed;
+  inset: 0;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity var(--transition-normal), visibility var(--transition-normal);
+}
+
+.search-overlay {
+  z-index: var(--z-modal);
+  display: grid;
+  place-items: start center;
+  padding: clamp(1rem, 6vw, 5rem) 1rem 1rem;
+  background: rgba(6, 11, 17, 0.44);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.search-overlay.active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.search-container {
+  width: min(100%, 760px);
+  padding: clamp(1.5rem, 4vw, 3rem);
+  background: var(--bg-canvas);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-elevated);
+  transform: translateY(-16px);
+  transition: transform var(--transition-normal);
+}
+
+.search-overlay.active .search-container {
+  transform: translateY(0);
+}
+
+.search-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.search-header .search-title {
+  color: var(--text-primary);
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+}
+
+.search-close-btn {
+  display: inline-grid;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 50%;
+}
+
+.search-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-top: 1.5rem;
+  border-bottom: 1px solid var(--text-primary);
+}
+
+.search-icon {
+  color: var(--color-gold);
+}
+
+.search-input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.8rem 0;
+  color: var(--text-primary);
+  background: transparent;
+}
+
+.search-submit-btn {
+  flex-shrink: 0;
+  padding: 0.65rem 0;
+  color: var(--color-gold);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+}
+
+.quick-search-tags {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem 1rem;
+  margin-top: 1.2rem;
+}
+
+.quick-search-label,
+.search-tag {
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.quick-search-label {
+  color: var(--text-muted);
+}
+
+.search-tag:hover {
+  color: var(--color-gold);
+}
+
+.mobile-nav-overlay {
+  z-index: calc(var(--z-modal) + 1);
+  background: rgba(6, 11, 17, 0.52);
+  backdrop-filter: blur(4px);
+}
+
+.mobile-nav-overlay.active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.mobile-nav-drawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: calc(var(--z-modal) + 2);
+  display: flex;
+  flex-direction: column;
+  width: min(86vw, 390px);
+  height: 100dvh;
+  padding: 1.5rem;
+  overflow-y: auto;
+  background: var(--bg-canvas);
+  box-shadow: var(--shadow-elevated);
+  transform: translateX(-105%);
+  transition: transform var(--transition-normal);
+}
+
+.mobile-nav-drawer.active {
+  transform: translateX(0);
+}
+
+.mobile-nav-header,
+.mobile-search-form {
+  display: flex;
+  align-items: center;
+}
+
+.mobile-nav-header {
+  justify-content: space-between;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.brand-logo-sm {
+  font-family: var(--font-heading);
+  font-size: 1.7rem;
+  letter-spacing: 0.22em;
+}
+
+.mobile-nav-close {
+  font-size: 1.4rem;
+  color: var(--text-primary);
+}
+
+.mobile-search-wrapper {
+  margin: 1.5rem 0 0.5rem;
+}
+
+.mobile-search-form {
+  border: 1px solid var(--border-color);
+  padding: 0 0.7rem;
+}
+
+.mobile-search-form input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.8rem 0;
+}
+
+.mobile-search-form button {
+  color: var(--color-gold);
+}
+
+.mobile-nav-list {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1rem;
+}
+
+.mobile-nav-list a {
+  display: block;
+  padding: 0.85rem 0;
+  border-bottom: 1px solid var(--border-color-light);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+}
+
+.mobile-nav-list a:hover {
+  color: var(--color-gold);
+}
+
+.mobile-nav-footer {
+  margin-top: auto;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.mobile-nav-footer p {
+  color: var(--text-primary);
+  font-size: 0.63rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.mobile-nav-footer .tagline {
+  margin-top: 0.35rem;
+  color: var(--text-muted);
+  font-size: 0.58rem;
+}
+
+@media (max-width: 992px) {
+  .navbar-header .navbar-bottom {
+    display: none;
+  }
+
+  .mobile-menu-btn {
+    display: inline-flex;
+  }
+
+  .nav-right {
+    gap: 0.15rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .navbar-header .navbar-top {
+    padding-top: 0.8rem;
+    padding-bottom: 0.7rem;
+  }
+
+  .search-label,
+  .nav-label {
+    display: none;
+  }
+
+  .brand-logo {
+    font-size: 1.6rem;
+    letter-spacing: 0.2em;
+  }
+
+  .search-container {
+    padding: 1.25rem;
+  }
+}

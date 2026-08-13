@@ -1,0 +1,119 @@
+<%- include('layouts/header') %>
+<%- include('layouts/navbar') %>
+
+<main class="search-page-wrapper">
+    <!-- Search Query Banner Section -->
+    <section class="search-banner-section">
+        <div class="container">
+            <div class="search-banner-content center">
+                <span class="editorial-subheading">ALVORA SEARCH</span>
+                <h1 class="search-title">Discover The Atelier</h1>
+
+                <!-- Search Input Form -->
+                <form action="/products/search" method="GET" class="search-page-form">
+                    <div class="search-field-group">
+                        <i class="ri-search-line search-icon"></i>
+                        <input 
+                            type="text" 
+                            name="q" 
+                            class="search-page-input" 
+                            placeholder="Search tailored jackets, silk dresses, cashmere..." 
+                            value="<%= typeof query !== 'undefined' ? query : '' %>"
+                            required
+                            autocomplete="off"
+                            autofocus
+                        >
+                        <button type="submit" class="btn btn-primary search-submit-btn">SEARCH</button>
+                    </div>
+                </form>
+
+                <!-- Search Result Count / Summary -->
+                <% if (typeof query !== 'undefined' && query) { %>
+                    <p class="search-results-summary">
+                        Showing results for <span class="highlight-query">"<%= query %>"</span> — 
+                        <strong><%= typeof products !== 'undefined' ? products.length : 0 %></strong> creations found
+                    </p>
+                <% } %>
+            </div>
+        </div>
+    </section>
+
+    <!-- Search Results Section -->
+    <section class="section-padding search-results-section">
+        <div class="container">
+            <% if (typeof products !== 'undefined' && products && products.length > 0) { %>
+                <div class="product-grid grid-4-col">
+                    <% products.forEach(product => { %>
+                        <div class="product-card" data-id="<%= product._id %>">
+                            <div class="card-image-wrapper">
+                                <a href="/products/<%= product.slug || product._id %>">
+                                    <img src="<%= product.images && product.images.length > 0 ? product.images[0] : '/images/placeholder.jpg' %>" alt="<%= product.name %>" class="primary-image">
+                                    <% if (product.images && product.images.length > 1) { %>
+                                        <img src="<%= product.images[1] %>" alt="<%= product.name %>" class="secondary-image">
+                                    <% } %>
+                                </a>
+
+                                <!-- Wishlist Heart Button -->
+                                <button type="button" class="wishlist-heart-btn" data-product-id="<%= product._id %>" aria-label="Add to Wishlist">
+                                    <i class="ri-heart-line"></i>
+                                </button>
+
+                                <div class="quick-add-overlay">
+                                    <a href="/products/<%= product.slug || product._id %>" class="btn-quick-view">VIEW DETAILS</a>
+                                </div>
+                            </div>
+
+                            <div class="card-details">
+                                <span class="card-brand"><%= product.brand || 'ALVORA' %></span>
+                                <h3 class="card-name">
+                                    <a href="/products/<%= product.slug || product._id %>"><%= product.name %></a>
+                                </h3>
+                                <div class="card-price">
+                                    $<%= product.price ? product.price.toLocaleString('en-US', { minimumFractionDigits: 2 }) : '0.00' %>
+                                </div>
+
+                                <% if (product.sizes && product.sizes.length > 0) { %>
+                                    <div class="card-sizes">
+                                        <% product.sizes.forEach(size => { %>
+                                            <span class="size-pill"><%= size %></span>
+                                        <% }); %>
+                                    </div>
+                                <% } %>
+                            </div>
+                        </div>
+                    <% }); %>
+                </div>
+            <% } else if (typeof query !== 'undefined' && query) { %>
+                <!-- Empty Search Results State -->
+                <div class="search-empty-state center">
+                    <i class="ri-search-eye-line empty-icon"></i>
+                    <h2>No Creations Found</h2>
+                    <p>We couldn't find any garments matching "<%= query %>". Please check spelling or explore popular collections.</p>
+
+                    <div class="suggested-tags-wrapper">
+                        <span class="suggested-title">POPULAR SEARCHES:</span>
+                        <div class="tags-container">
+                            <a href="/products/search?q=Cashmere" class="search-tag-pill">Cashmere Sweater</a>
+                            <a href="/products/search?q=Tailored+Blazer" class="search-tag-pill">Tailored Blazer</a>
+                            <a href="/products/search?q=Silk+Dress" class="search-tag-pill">Silk Evening Dress</a>
+                            <a href="/products/search?q=Leather+Boots" class="search-tag-pill">Leather Boots</a>
+                        </div>
+                    </div>
+
+                    <a href="/products" class="btn btn-outline margin-top-lg">DISCOVER ALL COLLECTIONS</a>
+                </div>
+            <% } else { %>
+                <!-- Initial Blank Search Prompt -->
+                <div class="search-prompt-state center">
+                    <i class="ri-compass-3-line prompt-icon"></i>
+                    <h3>Begin Your Exploration</h3>
+                    <p>Type keywords above to search across menswear, womenswear, footwear, and accessories.</p>
+                </div>
+            <% } %>
+        </div>
+    </section>
+</main>
+
+<%- include('layouts/footer') %>
+<%- include('layouts/scripts') %>
+
