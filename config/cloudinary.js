@@ -11,7 +11,7 @@ const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
     folder: 'alvora_products',
-    allowed_formats: ['jpg', 'jpeg', 'png', 'webp'],
+    allowedFormats: ['jpg', 'jpeg', 'png', 'webp'],
     transformation: [{ width: 1200, height: 1600, crop: 'limit' }]
   }
 });

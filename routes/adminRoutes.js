@@ -41,8 +41,10 @@ router.get('/', adminController.getDashboard);
 const handleUpload = (req, res, next) => {
     upload.array('images', 5)(req, res, (err) => {
         if (err) {
+            console.error('--- UPLOAD ERROR ---', err);
             return res.status(400).render('error', {
                 title: 'Upload Error | ALVORA',
+                message: err.message,
                 error: { status: 400, message: err.message }
             });
         }
